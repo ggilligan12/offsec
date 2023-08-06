@@ -109,3 +109,8 @@ Powershell SCP:
 ```powershell
 scp filename.txt kali@<our IP>:/home/kali
 ```
+
+RDP Connection:
+```bash
+xfreerdp /u:offsec /p:lab /v:192.168.123.121
+```
