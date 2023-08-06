@@ -1,4 +1,4 @@
-- N.b. many commands below are being run as sudo to make use of a port in the 0-1024 range, since root is needed to bind a listener to a port <1024. Beyond this range this is not necessary.
+- N.b. many commands below are being run as `sudo` to make use of a port in the `0-1024` range, since root is needed to bind a listener to a port `<1024`. Beyond this range this is not necessary.
 
 ## NETCAT
 
