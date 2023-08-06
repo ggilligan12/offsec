@@ -42,13 +42,15 @@ Secrets discovery in Git repos:
 `Gitrob & Gitleaks`
 
 Domain enumeration:
-`Shodan hostname:megacorpone.com`
+```
+Shodan hostname:megacorpone.com
+```
 
 HTTP headers:
-`https://securityheaders.com/`
+https://securityheaders.com/
 
 SSL/TLS security:
-`https://www.ssllabs.com/ssltest/`
+https://www.ssllabs.com/ssltest/
 
 Dump file metadata:
 ```bash

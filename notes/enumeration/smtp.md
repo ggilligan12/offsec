@@ -1,5 +1,10 @@
-SMTP (Simple Mail Transfer Protocol) Enumeration:
-`nmap -sV -p25 <Target IP> --open`
+### SMTP (Simple Mail Transfer Protocol) Enumeration
 
+```bash
+nmap -sV -p25 <Target IP> --open
+```
+
+```bash
 SMTP Connection:
-`nc -nv <Target IP> 25`
+nc -nv <Target IP> 25
+```
