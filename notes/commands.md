@@ -35,7 +35,7 @@ sudo systemctl start apache2
 sudo ss -antlp | grep apache
 ```
 ```bash
-`python3 -m http.server 80`
+python3 -m http.server 80
 ```
 
 See All Available Services:
