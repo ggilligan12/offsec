@@ -28,11 +28,6 @@ https://www.exploit-db.com/google-hacking-database
 Dorksearch for faster Google hacking:
 https://dorksearch.com/
 
-Finding relevant exploits:
-```bash
-firefox --search "Microsoft Edge site:exploit-db.com"
-```
-
 ### Misc
 
 Site report and server history:
