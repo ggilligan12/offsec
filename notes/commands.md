@@ -114,3 +114,11 @@ RDP Connection:
 ```bash
 xfreerdp /u:offsec /p:lab /v:192.168.123.121
 ```
+
+For when clipboard between Kali and Host is fucked again for no reason:
+```bash
+sudo apt remove open-vm-tools
+sudo apt remove open-vm-tools-desktop
+sudo apt install open-vm-tools
+sudo apt install open-vm-tools-desktop
+```
