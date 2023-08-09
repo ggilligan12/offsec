@@ -16,3 +16,25 @@ Hitting a page using http basic auth:
 ```bash
 hydra -l admin -P /usr/share/wordlists/rockyou.txt <target IP> http-get
 ```
+
+### Hashcat
+Standard `hashcat` usage:
+```bash
+hashcat crackable.txt /usr/share/wordlists/rockyou.txt
+```
+For debugging a new rule:
+```bash
+head /usr/share/wordlists/rockyou.txt > demo.txt
+hashcat -r newrule.rule --stdout demo.txt
+```
+See https://hashcat.net/wiki/doku.php?id=rule_based_attack for docs on the syntax for rules based attacks. Spaces separate discrete instructions to apply to one word. Newlines define a new pattern to attempt. Save it in a `.rules` file.
+```bash
+hashcat -m <insert hashing algo id here (0 for md5)> crackme.txt /usr/share/wordlists/rockyou.txt -r nonsense.rule --force
+```
+
+
+### Hashid
+Hashcat seems to kinda suck at identifying the hash in use for some reason. Fortunately `hashid` doesn't. Nb. take care to use quotes, particularly if your hash starts with a `$` or other syntactically important character.
+```bash
+hashid "$2y$10$XrrpX8RD6IFvBwtzPuTlcOqJ8kO2px2xsh17f60GZsBKLeszsQTBC"
+```
