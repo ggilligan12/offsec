@@ -32,9 +32,38 @@ See https://hashcat.net/wiki/doku.php?id=rule_based_attack for docs on the synta
 hashcat -m <insert hashing algo id here (0 for md5)> crackme.txt /usr/share/wordlists/rockyou.txt -r nonsense.rule --force
 ```
 
+All of the above is kinda cringe though. Just make use of a rulefile thats been crafted for us:
+```bash
+hashcat -m 0 crackable.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/rockyou-30000.rule --force
+```
+
 
 ### Hashid
 Hashcat seems to kinda suck at identifying the hash in use for some reason. Fortunately `hashid` doesn't. Nb. take care to use quotes, particularly if your hash starts with a `$` or other syntactically important character.
 ```bash
 hashid "$2y$10$XrrpX8RD6IFvBwtzPuTlcOqJ8kO2px2xsh17f60GZsBKLeszsQTBC"
+```
+
+### keepass2john
+```bash
+keepass2john allTehS3cre75.kdbx > keepass.hash
+```
+Be sure to drop the username and colon that is prepended to `keepass.hash`. Hashcat will parse it as a salt and get sad otherwise.
+```bash
+hashcat -h | grep KeePass | awk -F ' ' '{print $1}' 
+hashcat -m <output of the above> keepass.hash /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/rockyou-30000.rule --force
+```
+
+### JohnTheRipper
+In the event that Hashcat isn't working for whatever reason, consider making use of John:
+```bash
+john --wordlist=<password list> --rules=<rule Name> <our Hash>
+```
+Nb. with rules passed to John we can use the same syntax as with Hashcat, however we must prepend the file with:
+```
+[List.Rules:<rule Name>]
+```
+and we must be sure to add the rule file to the John config:
+```bash
+sudo sh -c 'cat /home/kali/Downloads/ssh.rule >> /etc/john/john.conf'
 ```
