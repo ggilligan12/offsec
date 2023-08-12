@@ -67,3 +67,9 @@ and we must be sure to add the rule file to the John config:
 ```bash
 sudo sh -c 'cat /home/kali/Downloads/ssh.rule >> /etc/john/john.conf'
 ```
+
+If we have an `id_rsa` file that we've managed to dump via some means (eg. path traversal in an http server) the we must first make it digestible for John:
+```bash
+ssh2john id_rsa > ssh.hash
+```
+nb. if we want to later log in to the SSH server using the credentials we've just recovered we may need to go ahead and `chmod` the private key file. Try both 600 and 400.
