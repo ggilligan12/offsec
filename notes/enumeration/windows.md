@@ -34,10 +34,16 @@ To enumerate the active network connections on a Windows system (with no DNS res
 netstat -ano
 ```
 - Installed applications
+To enumerate all 32 bit applications installed on the machine:
 ```powershell
-
+Get-ItemProperty "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*" | select displayname
 ```
+and for the 64 bit applications:
+```powershell
+Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*" | select displayname
+```
+Nb. this is not necessarily a complete list, never forget to check the `C:\ProgramFiles*` directories, as well as the `C:\tools` and `Downloads` paths.
 - Running processes
 ```powershell
-
+Get-Process
 ```
