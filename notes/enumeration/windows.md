@@ -12,9 +12,19 @@ whoami /groups
 ### Existing users and groups
 ```powershell
 Get-LocalUser
+```
+```powershell
 Get-LocalGroup
+```
+```powershell
 Get-LocalGroupMember adminteam
+```
+```powershell
 Get-LocalGroupMember Administrators
+```
+CMD command for miscllelaneous info on a particular user:
+```cmd
+net user <username>
 ```
 ### Operating system, version and architecture
 ```powershell
@@ -46,4 +56,27 @@ Nb. this is not necessarily a complete list, never forget to check the `C:\Progr
 ### Running processes
 ```powershell
 Get-Process
+```
+To find the binary running that process:
+```powershell
+Get-Process | Select-Object Path
+```
+### Finding Critical Files
+KeePass files:
+```powershell
+Get-ChildItem -Path C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue
+```
+XAMPP Web Server config:
+```powershell
+Get-ChildItem -Path C:\xampp -Include *.txt,*.ini -File -Recurse -ErrorAction SilentlyContinue
+```
+Data File Discovery:
+```powershell
+Get-ChildItem -Path C:\Users\ -Include *.txt,*.pdf,*.xls,*.xlsx,*.doc,*.docx -File -Recurse -ErrorAction SilentlyContinue
+```
+
+### Impersonation
+If we have a GUI session then we can run a new session as a different user with:
+```powershell
+runas /user:admin cmd
 ```
