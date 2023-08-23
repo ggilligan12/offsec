@@ -70,13 +70,21 @@ XAMPP Web Server config:
 ```powershell
 Get-ChildItem -Path C:\xampp -Include *.txt,*.ini -File -Recurse -ErrorAction SilentlyContinue
 ```
-Data File Discovery:
+Misc. Data File Discovery:
 ```powershell
-Get-ChildItem -Path C:\Users\ -Include *.txt,*.pdf,*.xls,*.xlsx,*.doc,*.docx -File -Recurse -ErrorAction SilentlyContinue
+Get-ChildItem -Path C:\Users\ -Include *.txt,*.pdf,*.xls,*.xlsx,*.doc,*.docx,*.ini -File -Recurse -ErrorAction SilentlyContinue
 ```
 
 ### Impersonation
 If we have a GUI session then we can run a new session as a different user with:
 ```powershell
 runas /user:admin cmd
+```
+
+### Command History
+```powershell
+Get-History
+```
+```powershell
+(Get-PSReadlineOption).HistorySavePath | ForEach-Object {cat $_}
 ```
