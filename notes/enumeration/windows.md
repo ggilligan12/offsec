@@ -115,3 +115,26 @@ Get-History
 ```powershell
 (Get-PSReadlineOption).HistorySavePath | ForEach-Object {cat $_}
 ```
+
+### Installed Windows Services
+Necessary to run this in an RDP session since `Get-CimInstance` (and `Get-Service` for that matter) will produce permission denied errors in a shell or WinRM session:
+```powershell
+Get-CimInstance -ClassName win32_service | Select Name,State,PathName | Where-Object {$_.State -like 'Running'}
+```
+Get starting mode of a win32 service, in the event we can't restart it and this value is set to `Auto` then a system reboot could let us hijack the service having previously edited the executable:
+```powershell
+Get-CimInstance -ClassName win32_service | Select Name, StartMode | Where-Object {$_.Name -like '<target service>'}
+```
+
+### icacls
+Enumerate which users/groups have what privileges on a binary (nb. beneficial to use `icacls` over `Get-ACL` since the former will work on `cmd` as well!):
+```powershell
+icacls "C:\path\to\interesting.exe"
+```
+Mask to permissions mapping:
+
+- F 	Full access
+- M 	Modify access
+- RX 	Read and execute access
+- R 	Read-only access
+- W 	Write-only access
