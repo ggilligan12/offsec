@@ -99,3 +99,22 @@ Shift it to the vulnerable directory and rename appropriately. Then restart the 
 ```powershell
 Restart-Service vulnerable-service
 ```
+
+### Unquoted Service Paths
+Run the following to establish the presence of an unquoted service path:
+```powershell
+wmic service get name,pathname |  findstr /i /v "C:\Windows\\" | findstr /i /v """
+```
+If one is found, then write the appropriate malicious binary to the correct path. TThe C program in the Binary Hijacking section will do nicely.
+
+If the unquoted path reads:
+```
+C:\Program Files\Silly little spaces\myProgram.exe
+```
+then we have our choice of the following to write our payload to:
+```
+C:\Program.exe
+C:\Program Files\Silly.exe
+C:\Program Files\Silly little.exe
+```
+There will be as many potential locations of malicious payload as there are spaces in the unquoted service path.
