@@ -136,7 +136,7 @@ Run the following to establish the presence of an unquoted service path:
 ```powershell
 wmic service get name,pathname |  findstr /i /v "C:\Windows\\" | findstr /i /v """
 ```
-If one is found, then write the appropriate malicious binary to the correct path. TThe C program in the Binary Hijacking section will do nicely.
+If one is found, then write the appropriate malicious binary to the correct path. The C program in the Binary Hijacking section will do nicely.
 
 If the unquoted path reads:
 ```
