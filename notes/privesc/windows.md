@@ -161,3 +161,9 @@ C:\Program Files\Silly.exe
 C:\Program Files\Silly little.exe
 ```
 There will be as many potential locations of malicious payload as there are spaces in the unquoted service path.
+
+### Scheduled Tasks
+In exactly the same vein as binary/DLL hijacking, we're looking to find a binary that is running/will be run as a powerful user, and edit the binary to privesc. Another avenue to exploit here is scheduled tasks. Exactly what they sound like, and exploited in exactly the same way. Enumerated like so:
+```cmd
+schtasks /query /fo LIST /v
+```
