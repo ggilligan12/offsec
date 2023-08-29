@@ -143,4 +143,5 @@ sudo lsof -i :<PORT_IN_QUESTION>
 ```
 Then kill the process:
 ```bash
-kill <PID>```
+kill <PID>
+```
