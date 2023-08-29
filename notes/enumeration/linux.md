@@ -90,7 +90,7 @@ route
 ```
 To see active network connections:
 ```bash
-ss -anp
+ss -ntplu
 ```
 The `iptables` command is unlikely to be available to our peon-tier user by default on account of it being an admin privilege by default. However we may still be able to view some config via:
 ```bash
