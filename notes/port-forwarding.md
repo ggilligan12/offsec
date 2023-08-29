@@ -46,3 +46,5 @@ We reverse the flow of traffic by specifying that this is a remote port forwardi
 ssh -N -R 127.0.0.1:2345:<machine2 IP>:<machine2 listening port> kali@<our IP>
 ```
 We have now established a tunnel that is listening on `127.0.0.1:2345`, that will forward traffic via port 22 on `machine1` on to `machine2`.
+
+### SSH Remote Dynamic Port Forwarding

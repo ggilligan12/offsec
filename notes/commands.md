@@ -132,3 +132,15 @@ sudo apt remove open-vm-tools-desktop
 sudo apt install open-vm-tools
 sudo apt install open-vm-tools-desktop
 ```
+
+For when we wanna close irritating dangling loopback listeners, first identify them via:
+```bash
+ss -ntlpu
+```
+This likely won't show the PID, to get that:
+```bash
+sudo lsof -i :<PORT_IN_QUESTION>
+```
+Then kill the process:
+```bash
+kill <PID>```
