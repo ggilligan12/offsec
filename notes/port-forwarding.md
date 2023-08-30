@@ -48,3 +48,21 @@ ssh -N -R 127.0.0.1:2345:<machine2 IP>:<machine2 listening port> kali@<our IP>
 We have now established a tunnel that is listening on `127.0.0.1:2345`, that will forward traffic via port 22 on `machine1` on to `machine2`.
 
 ### SSH Remote Dynamic Port Forwarding
+This is a trivial extension of what we've seen in remote port forwarding and dynamic port forwarding. Once again we will establish a tunnel from `machine1` to our Kali host, that will then execute a loopback and listen on a specified port on our Kali host. However this time we will not specify the details of `machine2` in our original tunnel, and once again hand over to `proxychains` to facilitate a seamless tunneling experience. Nb. this time we need only specify the port for our host to loop back to, the SSH default behaviour for this command is to hit `127.0.0.1`:
+```bash
+ssh -N -R 2345 kali@<our IP>
+```
+Remembering to add the information about the listener to our `/etc/proxychains4.conf`:
+```
+socks5 127.0.0.1 2345
+```
+Now `machine2` is effectively reachable as if it weren't behind a firewall:
+```bash
+proxychains nmap -sV -sT -A <machine2 IP>
+```
+
+### sshuttle
+This tool seems to do some of the heavy lifting from the commands above, assuming we already have port 2222 forwarding traffic to the `machine2` SSH server:
+```bash
+sshuttle -r user@<machine1 IP>:2222 <CIDR range 1> <CIDR range 2> ...
+```
