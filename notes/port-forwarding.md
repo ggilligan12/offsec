@@ -156,7 +156,7 @@ From the machine that we ran `dnscat2-server` on we're now a few trivial command
 windows
 ```
 ```bash
-windows -i <no. of the command session associated with the client we want to connect to (probably 1)>
+window -i <no. of the command session associated with the client we want to connect to (probably 1)>
 ```
 ```bash
 listen 127.0.0.1:2345 <IP to forward traffic to>:<port to forward to>
