@@ -125,6 +125,21 @@ RDP Connection:
 xfreerdp /u:offsec /p:lab /v:192.168.123.121
 ```
 
+For when the `vmmon` kernel module decides to not:
+```bash
+openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=VMware/"
+```
+```bash
+sudo /usr/src/linux-headers-`uname -r`/scripts/sign-file sha256 ./MOK.priv ./MOK.der $(modinfo -n vmmon)
+```
+```bash
+sudo /usr/src/linux-headers-`uname -r`/scripts/sign-file sha256 ./MOK.priv ./MOK.der $(modinfo -n vmnet)
+```
+```bash
+sudo mokutil --import MOK.der
+```
+and restart.
+
 For when clipboard between Kali and Host is fucked again for no reason:
 ```bash
 sudo apt remove open-vm-tools
