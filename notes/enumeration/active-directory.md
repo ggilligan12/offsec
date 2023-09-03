@@ -92,6 +92,39 @@ Find which (if any) machines the current user context has local admin on:
 ```powershell
 Find-LocalAdminAccess
 ```
+Find users logged into machines (nb. dubiously reliable):
+```powershell
+Get-NetSession -ComputerName <machine name> -Verbose
+```
+Should that fail an alternative that plies a different approach:
+```powershell
+.\PsLoggedon.exe \\<machine name>
+```
+Enumerate SPNs (services and the service accounts they are uniquely affiliated with):
+```powershell
+setspn -L <service name>
+```
+Or equally valid if we have PowerView to hand:
+```powershell
+Get-NetUser -SPN | select samaccountname,serviceprincipalname
+```
+Get a users ACEs:
+```powershell
+Get-ObjectAcl -Identity <user of interest>
+```
+Decode SIDs:
+```powershell
+Convert-SidToName <security identifier of interest>
+```
+How're we gonna find Domain Shares? All together now:
+```powershell
+Find-DomainShare
+```
+Decrypt a password found embedded in a policy XML:
+```powershell
+gpp-decrypt "<encrypted password>"
+```
+
 
 
 ### Automatic Enumeration
