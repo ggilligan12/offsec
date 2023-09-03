@@ -1,5 +1,19 @@
 ## Active Directory
 
+### Automatic Enumeration
+
+To make use of Bloodhound to enumerate an AD from the current user context run:
+```powershell
+Import-Module .\Sharphound.ps1
+```
+```powershell
+Invoke-BloodHound -CollectionMethod All -OutputDirectory C:\Users\stephanie\Desktop\ -OutputPrefix "domain-audit"
+```
+The resulting ZIP can be analysed in Neo4J:
+```bash
+sudo neo4j start
+```
+
 ### Manual Enumeration
 
 Login as a user on a domain:
@@ -124,8 +138,3 @@ Decrypt a password found embedded in a policy XML:
 ```powershell
 gpp-decrypt "<encrypted password>"
 ```
-
-
-
-### Automatic Enumeration
-
