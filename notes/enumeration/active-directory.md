@@ -22,11 +22,77 @@ Enumerate particular domain group:
 ```cmd
 net group "uberPwnage" /domain
 ```
-Get the Primary Domain Controller:
+Get domain info via Powershell:
 ```powershell
-[System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+```
+Get the primary domain controller (PDC):
+```powershell
+$PDC = $domainObj.PdcRoleOwner.Name
+```
+Get LDAP path formatted domain:
+```powershell
+([adsi]'').distinguishedName
+```
+Combine the above and `FindAll()` to get every directory in the AD:
+```powershell
+$PDC = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain().PdcRoleOwner.Name
+$DN = ([adsi]'').distinguishedName 
+$LDAP = "LDAP://$PDC/$DN"
+$direntry = New-Object System.DirectoryServices.DirectoryEntry($LDAP)
+$dirsearcher = New-Object System.DirectoryServices.DirectorySearcher($direntry)
+$dirsearcher.FindAll()
+```
+
+Extending this further still, the following will enumerate all users in the domain:
+```powershell
+$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = $domainObj.PdcRoleOwner.Name
+$DN = ([adsi]'').distinguishedName 
+$LDAP = "LDAP://$PDC/$DN"
+$direntry = New-Object System.DirectoryServices.DirectoryEntry($LDAP)
+$dirsearcher = New-Object System.DirectoryServices.DirectorySearcher($direntry)
+$dirsearcher.filter="samAccountType=805306368" # for users (or 268435456 for groups)
+$result = $dirsearcher.FindAll()
+Foreach($obj in $result)
+{
+    Foreach($prop in $obj.Properties)
+    {
+        $prop
+    }
+    Write-Host "-------------------------------"
+}
+```
+
+For a cleaner set of cmdlets to query the AD with we can import `PowerView`:
+```powershell
+Import-Module .\PowerView.ps1
+```
+For basic info about the domain:
+```powershell
+Get-NetDomain
+```
+For basic info about users:
+```powershell
+Get-NetUser
+```
+and for just the names of users:
+```powershell
+Get-NetUser | select cn
+```
+Intuitively enough, for groups:
+```powershell
+Get-NetGroup
+```
+For machines, guess what?
+```powershell
+Get-NetComputer
+```
+Find which (if any) machines the current user context has local admin on:
+```powershell
+Find-LocalAdminAccess
 ```
 
 
-
 ### Automatic Enumeration
+

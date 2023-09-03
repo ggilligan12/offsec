@@ -90,6 +90,11 @@ Powershell or CMD:
 (dir 2>&1 *`|echo CMD);&<# rem #>echo Powershell
 ```
 
+Powershell bypass script execution prevention:
+```powershell
+powershell -ep bypass
+```
+
 Powershell Convert to Base64:
 ```powershell
 [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('<insert payload here>'))
