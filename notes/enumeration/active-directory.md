@@ -9,9 +9,13 @@ Import-Module .\Sharphound.ps1
 ```powershell
 Invoke-BloodHound -CollectionMethod All -OutputDirectory C:\Users\stephanie\Desktop\ -OutputPrefix "domain-audit"
 ```
-The resulting ZIP can be analysed in Neo4J:
+The resulting ZIP can be analysed in Neo4J (default creds `neo4j:neo4j`):
 ```bash
 sudo neo4j start
+```
+Then start Bloodhound locally, login with our Neo4J creds, and upload the zip we generated on the Windows machine:
+```bash
+bloodhound
 ```
 
 ### Manual Enumeration
