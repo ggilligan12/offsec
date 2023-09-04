@@ -55,6 +55,10 @@ Look upon our exploitable shit ye mighty and despair!
 
 ## Manual Enumeration
 
+### Account Policy
+```cmd
+net accounts
+```
 ### Username and hostname
 ```cmd
 whoami
