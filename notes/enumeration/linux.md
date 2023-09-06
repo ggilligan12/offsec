@@ -3,7 +3,6 @@
 ## Automatic Enumeration
 
 ### unix-privesc-check
-
 On Kali host:
 ```bash
 cp /usr/bin/unix-privesc-check/unix-privesc-check .
@@ -24,6 +23,12 @@ The `output.txt` file is meaty, and in standard mode it isn't complete, but it's
 cat output.txt | grep -A 10 writable
 ```
 This is just a quick start. Worth going over the file carefully if nothing immediately jumps out.
+
+### linpeas
+Nb. well worth repeating these steps but instead starting with:
+```bash
+cp /usr/share/peass/linpeas/linpeas.sh .
+```
 
 ## Manual Enumeration
 For fine grained/specific enumeration items see the glossary below. Hopefully a standard privesc check as detailed above should be sufficient, but in case it isn't.

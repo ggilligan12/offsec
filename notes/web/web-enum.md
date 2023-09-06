@@ -27,6 +27,9 @@ sudo nmap -p80 --script=http-enum <Target IP>
 
 ### Website Tech Stack Enumeration:
 https://wappalyzer.com
+```bash
+whatweb http://192.168.12.34
+```
 
 ### Enumerating a Wordpress website:
 ```bash
