@@ -17,6 +17,10 @@ Then start Bloodhound locally, login with our Neo4J creds, and upload the zip we
 ```bash
 bloodhound
 ```
+One neat custom query to pop into Neo4J to see which users have a session on which machines:
+```
+MATCH p = (c:Computer)-[:HasSession]->(m:User) RETURN p
+```
 
 ### Manual Enumeration
 
