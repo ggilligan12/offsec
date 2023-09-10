@@ -40,3 +40,9 @@ wpscan --url <Target URL>
 Unlikely to be exposed, but always worth checking:
 - `/manager/html` (Tomcat)
 - `/phpmyadmin` (phpMyAdmin)
+
+### Searching for SQLi:
+Be sure to make use of:
+```bash
+wapiti -u <target IP>
+```

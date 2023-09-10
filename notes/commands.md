@@ -90,6 +90,11 @@ Powershell or CMD:
 (dir 2>&1 *`|echo CMD);&<# rem #>echo Powershell
 ```
 
+Powershell 64 bit machine?
+```powershell
+[System.Environment]::Is64BitOperatingSystem
+```
+
 Powershell bypass script execution prevention:
 ```powershell
 powershell -ep bypass
