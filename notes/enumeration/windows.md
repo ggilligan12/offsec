@@ -150,6 +150,9 @@ Get-History
 ```powershell
 (Get-PSReadlineOption).HistorySavePath | ForEach-Object {cat $_}
 ```
+```powershell
+cat C:\Users\<user>\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt
+```
 
 ### Installed Windows Services
 Necessary to run this in an RDP session since `Get-CimInstance` (and `Get-Service` for that matter) will produce permission denied errors in a shell or WinRM session:

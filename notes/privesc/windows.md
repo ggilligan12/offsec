@@ -193,8 +193,7 @@ Add-LocalGroupMember -Group "Remote Desktop Users" -Member "Administrator"
 ```
 Enable RDP on the machine
 ```powershell
-Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0
-Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -value 0; Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 ```
 It should now be possible to RDP to the machine, not withstanding any further pivoting/port-forwarding that may be necessary:
 ```bash

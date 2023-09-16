@@ -58,7 +58,6 @@ $secureString = ConvertTo-SecureString $password -AsPlaintext -Force;
 $credential = New-Object System.Management.Automation.PSCredential $username, $secureString;
 ```
 
-
 ### WinRM
 Assuming you have credentials, the following will give us a Powershell session 
 ```powershell
