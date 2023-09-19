@@ -184,7 +184,7 @@ First go ahead an pick up the binaries you need based on OS and arch from the re
 
 Then launch the proxy binary on Kali like so (any port will do but `443` is less likely to be blocked):
 ```bash
-./lin-proxy -selfcert -laddr 0.0.0.0:443
+./ligolo-proxy -selfcert -laddr 0.0.0.0:443
 ```
 Download the agent binary to the target machine (assuming its Windows):
 ```powershell
