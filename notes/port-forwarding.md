@@ -167,7 +167,13 @@ The command above will establish a loopback listener on the server at `127.0.0.1
 
 Truly enlightened hackers will probably ignore all of the above in favour of the tunnelling provided by `ligolo-ng`. A little more time is needed to set up, but once complete this will provide genuinely seamless access to previously inaccessible subnets.
 
-As a one-time prerequisite (or if Kali has somehow been nuked) then the following will need to be run to restore the Ligolo interface:
+First set up the Ligolo interface:
+
+In the likely event that we need to delete our previous effort at this (ignore this command if running for first time or on fresh machine):
+```bash
+sudo ip link del ligolo
+```
+Now (re)create the interface:
 ```bash
 sudo ip tuntap add user kali mode tun ligolo
 ```
