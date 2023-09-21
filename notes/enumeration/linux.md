@@ -5,8 +5,10 @@
 ### unix-privesc-check
 On Kali host:
 ```bash
-cp /usr/bin/unix-privesc-check/unix-privesc-check .
-python3 -m http.server
+cp /usr/bin/unix-privesc-check .
+```
+```bash
+python3 -m http.server 80
 ```
 On target machine:
 ```bash

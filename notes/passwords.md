@@ -17,6 +17,13 @@ Hitting a page using http basic auth:
 hydra -l admin -P /usr/share/wordlists/rockyou.txt <target IP> http-get
 ```
 
+## nmap
+
+The `passwords.txt` argument can be ommitted, if it is then a default password database will be used. It will begin with checking if the password is the same as the username, which is a nice touch that's easily forgotten about otherwise.
+```bash
+nmap -p 22 --script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt <target IP>
+```
+
 ## Hash Cracking
 
 ### Hashcat
