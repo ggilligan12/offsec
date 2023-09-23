@@ -175,10 +175,7 @@ sudo ip link del ligolo
 ```
 Now (re)create the interface:
 ```bash
-sudo ip tuntap add user kali mode tun ligolo
-```
-```bash
-sudo ip link set ligolo up
+sudo ip tuntap add user kali mode tun ligolo; sudo ip link set ligolo up
 ```
 First go ahead an pick up the binaries you need based on OS and arch from the releases page: https://github.com/nicocha30/ligolo-ng/releases
 
