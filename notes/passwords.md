@@ -83,6 +83,15 @@ ssh2john id_rsa > ssh.hash
 ```
 nb. if we want to later log in to the SSH server using the credentials we've just recovered we may need to go ahead and `chmod` the private key file. Try both 600 and 400.
 
+Similarly if we have an encrypted zip, then we'll wanna get it back to Kali, then run:
+```bash
+zip2john zippyboi.zip > hopefully-crackable
+```
+then
+```bash
+john hopefully-crackable
+```
+
 ## Active Directory Password Cracking
 
 Back to directly targeting an authentication interface, now in the context of AD. For all of the following it is well worth checking the password policy with `net accounts` in order to be sure that we don't immediately get locked out of every account we hit. All of the following assume that we have obtained a plaintext password by some other means, but don't yet have a matching username.

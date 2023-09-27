@@ -1,6 +1,6 @@
 ## Linux PrivEsc
 
-If we reckon we have an admin password:
+If we reckon we have a privileged users password, remember to try this even if login via SSH has failed, it may just be that the privileged user we have owned doesn't have SSH, but they can still authenticate locally:
 ```bash
 su - root
 ```
