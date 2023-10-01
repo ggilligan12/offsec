@@ -62,6 +62,14 @@ Be sure to drop the username and colon that is prepended to `keepass.hash`. Hash
 hashcat -h | grep KeePass | awk -F ' ' '{print $1}' 
 hashcat -m <output of the above> keepass.hash /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/rockyou-30000.rule --force
 ```
+Once cracked `kpcli` is our friend:
+```bash
+kpcli Database.kdbx
+```
+User `cd` and `ls` to navigate to the secret of interest:
+```bash
+kpcli:/> show -a -f <int value of entry of interest>
+```
 
 ### JohnTheRipper
 In the event that Hashcat isn't working for whatever reason, consider making use of John:
