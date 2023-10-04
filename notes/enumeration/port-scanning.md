@@ -2,52 +2,57 @@
 ### Simple TCP scan:
 1 second timeout (`-z` gives us zero I/O mode for scanning)
 ```bash
-nc -nvv -w 1 -z <IP address> <Port range>
+nc -nvv -w 1 -z 192.168.xx.xx <Port range>
 ```
 
 ### Simple UDP scan:
 1 second timeout
 ```bash
-nc -nv -u -z -w 1 <IP address> <Port range>
+nc -nv -u -z -w 1 192.168.xx.xx <Port range>
 ```
 
 ### SYN Stealth Scan:
 ```bash
-sudo nmap -sS <Target IP address>
+sudo nmap -sS 192.168.xx.xx
 ```
 
 ### TCP Connect Scan:
 ```bash
-nmap -sT <Target IP address>
+nmap -sT 192.168.xx.xx
 ```
 
 ### UDP Scan:
 ```bash
-sudo nmap -sU <Target IP address>
+sudo nmap -sU 192.168.xx.xx
 ```
 
 ### Network Sweep:
 This sends out an ICMP ping, a TCP `SYN` packet to port `443`, a TCP `ACK` packet to port `80`, and an ICMP timestamp request. This is thanks to the `-sn` flag, which disables general port scanning in favour of a focused ping sweep.
 ```bash
-nmap -sn <Target IP address>-<no. of addresses youd like to sweep over>
+nmap -sn 192.168.xx.xx-<no. of addresses youd like to sweep over>
 ```
 
 ### Top targets scan:
 The `-A` option gives us a traceroute, and the `-oG` option gives us our output in a greppable text file.
 ```bash
-nmap -sT -A --top-ports=20 <Target IP address>-<no. of addresses to sweep> -oG <greppable results filename>.txt
+nmap -sT -A --top-ports=4260 192.168.xx.xx-<no. of addresses to sweep> -oG <greppable results filename>.txt
+```
+
+### The 'Fuck It We Ball' Scan
+```bash
+nmap -p- 192.168.xx.xx
 ```
 
 ### OS Fingerprinting:
 Reliable, but not a definitive tool, can be mistaken, more comprehensive enumeration required to verify the target OS.
 ```bash
-sudo nmap -O <Target IP address>
+sudo nmap -O 192.168.xx.xx
 ```
 
 ### Service Enumeration:
 The `-sV` flag help look for service 'banners'. Nb. These can be changed by the machines owner and can therefore be used to mislead. Useful, but not to be trusted implicitly.
 ```bash
-nmap -sV -sT -A <Target IP address>
+nmap -sV -sT -A 192.168.xx.xx
 ```
 
 ### NSE (nmap Scripting Engine):
@@ -55,7 +60,7 @@ Repository of scripts that come for free with nmap saved down to `/usr/share/nma
 Quite a few of these scripts appear to be straight up exploits targeting particular CVE's
 To run a script:
 ```bash
-nmap <Target IP address> --script=<Script name>
+nmap 192.168.xx.xx --script=<Script name>
 ```
 To access that scripts man page:
 ```bash
