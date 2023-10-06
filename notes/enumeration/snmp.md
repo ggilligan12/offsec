@@ -39,3 +39,7 @@ listening TCP ports:
 ```bash
 snmpwalk -c <Communtiy> -v<Version> <Target IP> 1.3.6.1.2.1.6.13.1.3
 ```
+Querying the extended version:
+```bash
+snmpwalk -v 2c -c public 192.168.xx.xx NET-SNMP-EXTEND-MIB::nsExtendObjects
+```
