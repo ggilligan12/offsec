@@ -90,6 +90,11 @@ Find Git repos on Linux:
 find / -name ".git" 2>/dev/null
 ```
 
+Spawn a TTY shell:
+```bash
+python -c 'import pty; pty.spawn("/bin/sh")'
+```
+
 Powershell or CMD:
 ```powershell
 (dir 2>&1 *`|echo CMD);&<# rem #>echo Powershell
