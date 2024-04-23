@@ -42,3 +42,4 @@ base64 payload.exe
     </body>
 </html>
 ```
+Nb. this script will fail against Microsoft Edge browsers since they don't make use of `createObjectURL()`. Instead we'll need to use `window.navigator.msSaveBlob`.
