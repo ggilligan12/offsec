@@ -1,6 +1,4 @@
-## Download Cradles
-
-### Windows
+### Download Cradles
 
 OSEP has shown a very strong bias to Windows oriented client side attacks so far. I do wonder if I'll ever get to discussing Linux Download Cradles...
 
