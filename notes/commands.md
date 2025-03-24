@@ -195,3 +195,8 @@ Then kill the process:
 ```bash
 kill <PID>
 ```
+
+For when stuff is just breaking for no reason over the network and it turns out its cos the MTU is still set to 1500:
+```bash
+sudo ifconfig tun0 mtu 1250
+```
