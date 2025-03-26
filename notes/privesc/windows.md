@@ -203,3 +203,17 @@ It should now be possible to RDP to the machine, not withstanding any further pi
 ```bash
 xfreerdp /v:192.168.12.34 /u:Administrator /p:12345abcde
 ```
+
+### CLM & AMSI Bypass
+
+The Constrained Language Mode is something we may well find ourselves dumped in once we get a foothold on a machine. This constraint is placed on us by the deployment of AppLocker on the host. AppLocker has had (and apparently continues to have) difficulties being effectively applied to custom runspaces that are created from within a Powershell session. Therefore a reliable bypass is available in the form of creating a custom runspace and deploying a new reverse shell from there.
+
+It is likely that in the same instant we may be faced with the need to execute an AMSI bypass, since our elevation to Full Language Mode may well be picked up on by Defender or another EDR. There are a _lot_ of approaches to AMSI bypass, to the extent that it doesn't seem helpful to list any here, but here's a good resource: https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
+
+For our purposes there is a convenient `.csproj` file kindly provided by the author of this repo that hits both of these at the same time and returns us a convenient reverse shell: https://github.com/Sh3lldon/FullBypass/tree/main
+
+Having copied the `.csproj` to an appropriate writable dir, eg. `C:\Windows\Tasks` or `C:\Windows\Temp`, simply run via `msbuild.exe`:
+```powershell
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe .\FullBypass.csproj
+```
+

