@@ -23,3 +23,5 @@ LAPSToolkit - https://github.com/leoloobeek/LAPSToolkit/blob/master/README.md
 krbrelayx - https://github.com/dirkjanm/krbrelayx
 
 PsExec - https://github.com/EliteLoser/Invoke-PsExec/blob/master/PsExec.exe
+
+pspy - https://github.com/DominicBreuker/pspy
