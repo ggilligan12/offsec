@@ -25,3 +25,7 @@ krbrelayx - https://github.com/dirkjanm/krbrelayx
 PsExec - https://github.com/EliteLoser/Invoke-PsExec/blob/master/PsExec.exe
 
 pspy - https://github.com/DominicBreuker/pspy
+
+SuperSharpShooter - https://github.com/ScriptIdiot/SuperSharpShooter/tree/master
+
+DotNetToJScript - https://github.com/tyranid/DotNetToJScript

