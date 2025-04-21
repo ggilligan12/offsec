@@ -93,3 +93,7 @@ To do a sweep of TCP ports:
 ```powershell
 1..1024 | % {echo ((New-Object Net.Sockets.TcpClient).Connect("<Target IP>", $_)) "TCP port $_ is open"} 2>$null
 ```
+To sweep a particular port on a subnet where you don't know the IPs:
+```powershell
+1..255 | % {echo $_; echo ((New-Object Net.Sockets.TcpClient).Connect("172.16.70.$_", 80)) "TCP port 80 is open on 172.16.70.$_"} 2>$null
+```

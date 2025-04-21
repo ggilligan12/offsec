@@ -29,3 +29,5 @@ pspy - https://github.com/DominicBreuker/pspy
 SuperSharpShooter - https://github.com/ScriptIdiot/SuperSharpShooter/tree/master
 
 DotNetToJScript - https://github.com/tyranid/DotNetToJScript
+
+Invoke-ReflectivePEInjection - https://github.com/PowerShellMafia/PowerSploit/blob/master/CodeExecution/Invoke-ReflectivePEInjection.ps1
